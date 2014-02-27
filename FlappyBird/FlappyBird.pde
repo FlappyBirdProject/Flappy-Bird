@@ -2,6 +2,8 @@ PImage tomceji;
 PImage logo;
 PImage playButton;
 PImage scoresButton;
+PImage playButtonHighlight;
+PImage scoresButtonHighlight;
 boolean mainMenu;
 boolean play;
 
@@ -11,6 +13,8 @@ void setup() {
   logo = loadImage("logo.png");
   playButton = loadImage("playButton.png"); 
   scoresButton = loadImage("scoresButton.png");
+  playButtonHighlight = loadImage("playButtonHighlight.png");
+  scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
   backgroundFlappy();
   mainMenu = true;
 }
@@ -47,9 +51,21 @@ void drawPipes() {
 }
 
 void drawPlayButton() {
+  if (mouseX < 150 || mouseX > 280 || mouseY < 313.5 || mouseY > 386.5) {
+    image(playButton, 215, 350);
+  } 
+  else {
+    image(playButtonHighlight, 215, 350);
+  }
 }
 
 void drawScoresButton() {
+  if (mouseX < 320 || mouseX > 450 || mouseY < 313.5 || mouseY > 386.5) { 
+    image(scoresButton, 385, 350);
+  } 
+  else {
+    image(scoresButtonHighlight, 385, 350);
+  }
 }
 
 void drawFlappy() {
@@ -60,9 +76,7 @@ void checkFlappy() {
 
 void drawLogo() {
   imageMode(CENTER);
-  image(playButton, 215, 350);
-  image(scoresButton, 385, 350);
   image(logo, 300, 150);
-  image(tomceji, 300, 235);
+  image(tomceji, 300, 250);
 }
 
