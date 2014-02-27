@@ -6,6 +6,9 @@ PImage playButtonHighlight;
 PImage scoresButtonHighlight;
 boolean mainMenu;
 boolean play;
+float logoX = 300;
+float logoY = 250;
+float speedOfLogo = .5;
 
 void setup() {
   size(600, 600);
@@ -25,6 +28,14 @@ void draw() {
     drawPlayButton();
     drawScoresButton();
     drawLogo();
+    image(tomceji, logoX, logoY);
+    logoY += speedOfLogo;
+    if(logoY > 265) {
+      speedOfLogo *= -1;
+    }
+    if(logoY < 235) {
+      speedOfLogo *= -1;
+    }
   }
   if (play) {
     drawFlappy();
@@ -77,6 +88,5 @@ void checkFlappy() {
 void drawLogo() {
   imageMode(CENTER);
   image(logo, 300, 150);
-  image(tomceji, 300, 250);
 }
 
