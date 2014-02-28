@@ -12,6 +12,7 @@ float logoY = 250;
 float speedOfLogo = .5;
 
 void setup() {
+  imageMode(CENTER);
   size(600, 600);
   tomceji = loadImage("tomceji.jpg");
   logo = loadImage("logo.png");
@@ -45,9 +46,8 @@ void draw() {
     drawPipes();
     checkFlappy();
   }
-  
+
   if (scoreMenu) {
-    
   }
 }
 
@@ -62,7 +62,7 @@ void backgroundFlappy() {
   rect(-11, 500, 621, 110);
   fill(122, 126, 4);
   textAlign(RIGHT);
-  text("Made by Fisher Darling and Eric Lindau", 578, 595);
+  text("Made by Fisher Darling and Eric Lindau", 16*width/17, 595);
 }
 
 void drawPipes() {
@@ -101,7 +101,6 @@ void checkFlappy() {
 }
 
 void drawLogo() {
-  imageMode(CENTER);
   image(logo, 300, 150);
 }
 
