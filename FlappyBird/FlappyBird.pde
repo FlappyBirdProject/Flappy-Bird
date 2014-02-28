@@ -1,4 +1,4 @@
-PImage tomceji;
+PImage tomceji;//56x74
 PImage logo;
 PImage playButton;
 PImage scoresButton;
