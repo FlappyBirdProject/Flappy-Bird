@@ -6,6 +6,7 @@ PImage playButtonHighlight;
 PImage scoresButtonHighlight;
 boolean mainMenu;
 boolean play;
+boolean scoreMenu;
 float logoX = 300;
 float logoY = 250;
 float speedOfLogo = .5;
@@ -23,17 +24,19 @@ void setup() {
 }
 
 void draw() {
+
+  backgroundFlappy();
+
   if (mainMenu) {
-    backgroundFlappy();
     drawPlayButton();
     drawScoresButton();
     drawLogo();
     image(tomceji, logoX, logoY);
     logoY += speedOfLogo;
-    if(logoY > 265) {
+    if (logoY > 265) {
       speedOfLogo *= -1;
     }
-    if(logoY < 235) {
+    if (logoY < 235) {
       speedOfLogo *= -1;
     }
   }
@@ -41,6 +44,10 @@ void draw() {
     drawFlappy();
     drawPipes();
     checkFlappy();
+  }
+  
+  if (scoreMenu) {
+    
   }
 }
 
@@ -62,20 +69,28 @@ void drawPipes() {
 }
 
 void drawPlayButton() {
-  if (mouseX < 150 || mouseX > 280 || mouseY < 313.5 || mouseY > 386.5) {
+  if (mouseX < 152 || mouseX > 277 || mouseY < 313.5 || mouseY > 386.5) {
     image(playButton, 215, 350);
   } 
   else {
     image(playButtonHighlight, 215, 350);
+    if (mousePressed) {
+      play = true;
+      mainMenu = false;
+    }
   }
 }
 
 void drawScoresButton() {
-  if (mouseX < 320 || mouseX > 450 || mouseY < 313.5 || mouseY > 386.5) { 
+  if (mouseX < 322 || mouseX > 447 || mouseY < 313.5 || mouseY > 386.5) { 
     image(scoresButton, 385, 350);
   } 
   else {
     image(scoresButtonHighlight, 385, 350);
+    if (mousePressed) {
+      scoreMenu = true;
+      mainMenu = false;
+    }
   }
 }
 
