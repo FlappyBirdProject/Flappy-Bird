@@ -7,10 +7,11 @@ PImage scoresButtonHighlight;
 boolean mainMenu;
 boolean play;
 boolean scoreMenu;
-boolean callPipe;
+boolean callPipe = true;
 float logoX = 300;
 float logoY = 250;
 float speedOfLogo = .5;
+int randPipe;
 
 void setup() {
   imageMode(CENTER);
@@ -26,6 +27,8 @@ void setup() {
 }
 
 void draw() {
+  
+  randPipe = (int)random(4);
 
   backgroundFlappy();
 
@@ -44,8 +47,25 @@ void draw() {
   }
   if (play) {
     drawFlappy();
-    drawPipes();
     checkFlappy();
+
+    if (callPipe) {
+      switch(randPipe) {
+      case 0: 
+        pipes.drawPipes(1);
+        break;
+      case 1: 
+        pipes.drawPipes(2);
+        break;
+      case 2:
+        pipes.drawPipes(3);
+        break;
+      case 3:
+        pipes.drawPipes(4);
+        break;
+      }
+      //callPipe = false;
+    }
   }
 
   if (scoreMenu) {
@@ -64,14 +84,6 @@ void backgroundFlappy() {
   fill(122, 126, 4);
   textAlign(RIGHT);
   text("Made by Fisher Darling and Eric Lindau", 16*width/17, 595);
-}
-
-void drawPipes() {
-  
-  if(callPipe) {
-    callPipe = false;
-  }
-  
 }
 
 void drawPlayButton() {
@@ -108,5 +120,11 @@ void checkFlappy() {
 
 void drawLogo() {
   image(logo, 300, 150);
+}
+
+static class pipes {
+  static void drawPipes(int i) {
+    
+  }
 }
 
