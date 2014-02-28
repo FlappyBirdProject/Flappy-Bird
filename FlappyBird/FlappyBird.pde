@@ -7,6 +7,7 @@ PImage scoresButtonHighlight;
 boolean mainMenu;
 boolean play;
 boolean scoreMenu;
+boolean callPipe;
 float logoX = 300;
 float logoY = 250;
 float speedOfLogo = .5;
@@ -66,6 +67,11 @@ void backgroundFlappy() {
 }
 
 void drawPipes() {
+  
+  if(callPipe) {
+    callPipe = false;
+  }
+  
 }
 
 void drawPlayButton() {
