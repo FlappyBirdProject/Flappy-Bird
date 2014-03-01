@@ -6,8 +6,10 @@ PImage scoresButton;
 PImage playButtonHighlight;
 PImage scoresButtonHighlight;
 
-//The Beautiful font
-PFont flap;
+//The Beautiful 20 size font
+PFont flap20;
+//size 48
+PFont flap48;
 
 //The menu booleans
 boolean mainMenu;
@@ -48,84 +50,96 @@ void setup() {
   scoresButton = loadImage("scoresButton.png");
   playButtonHighlight = loadImage("playButtonHighlight.png");
   scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
-  flap = loadFont("04b19-20.vlw");
+  flap20 = loadFont("04b19-20.vlw");
+  flap48 = loadFont("04b19-48.vlw");
   backgroundFlappy();
   mainMenu = true;
   tomY = 2*height/5;
-  textFont(flap);
 }
 
 void draw() {
-
   yTop = tomY - 37;
   yBot = tomY + 37;
   xRight = 328;
-
   backgroundFlappy();
-
   if (mainMenu) {
-    drawPlayButton();
-    drawScoresButton();
-    drawLogo();
-    image(tomceji, logoX, logoY);
-    logoY += speedOfLogo;
-    if (logoY > 265) {
-      speedOfLogo *= -1;
-    }
-    if (logoY < 235) {
-      speedOfLogo *= -1;
-    }
+    drawMainMenu();
   }
   if (play) {
-    checkFlappy();
-
-    image(tomceji, width/2, tomY);
-
-    //make first pipe appear here
-    if (millis() - timeStart >= waitStart) {
-      print("test");
-      //pipe.drawPipe(some value here; we need to decide how to determine pipe value);
-      timeStart = millis() - 1500;
-    }
-
-    if (goUp) {
-      speed -= grav;
-    }
-    else {
-      speed += grav;
-    }
-
-    if (speed <= 0) {
-      goUp = false;
-    }
-
-    tomY += speed;
-
-    //checks if he hits ground ... will add check for him hitting pipes once pipes are added!
-    if (tomY >= 458 || yTop <= 37) {
-      gameOver = true;
-      play = false;
-    }
+    playGame();
   }
-
   if (scoreMenu) {
+    drawScoreMenu();
   }
-
   if (gameOver) {
-    textAlign(CENTER);
-    fill(255);
-    text("(this is just a test ending screen; we need fonts and stuff)\nYOU LOST WITH A SCORE OF:\n" + score, 300, 250);
-    text("Press and key to continue", 300, 400);
-    if (keyPressed) {
-      gameOver = false;
-      mainMenu = true;
-      tomY = 2*height/5;
-      speed = 0;
-    }
+    gameOverMenu();
   }
 }
 
+void drawMainMenu() {
+  textFont(flap20);
+  drawPlayButton();
+  drawScoresButton();
+  drawLogo();
+  image(tomceji, logoX, logoY);
+  logoY += speedOfLogo;
+  if (logoY > 265) {
+    speedOfLogo *= -1;
+  }
+  if (logoY < 235) {
+    speedOfLogo *= -1;
+  }
+}
+
+void playGame() {
+  textFont(flap20);
+  checkFlappy();
+  image(tomceji, width/2, tomY);
+  //make first pipe appear here
+  if (millis() - timeStart >= waitStart) {
+    print("test");
+    //pipe.drawPipe(some value here; we need to decide how to determine pipe value);
+    timeStart = millis() - 1500;
+  }
+  if (goUp) {
+    speed -= grav;
+  }
+  else {
+    speed += grav;
+  }
+  if (speed <= 0) {
+    goUp = false;
+  }
+  tomY += speed;
+  //checks if he hits ground ... will add check for him hitting pipes once pipes are added!
+  if (tomY >= 458 || yTop <= 37) {
+    gameOver = true;
+    play = false;
+  }
+}
+
+void drawScoreMenu() {
+  fill(255);
+  textAlign(CENTER);
+  textFont(flap48);
+  text("Scores", 300, 100);
+}
+
+void gameOverMenu() {
+  textAlign(CENTER);
+  fill(255);
+  text("(this is just a test ending screen; we need fonts and stuff)\nYOU LOST WITH A SCORE OF:\n" + score, 300, 250);
+  text("Press the '+' key to continue", 300, 400);
+  if (keyPressed && key == '+') {
+    gameOver = false;
+    mainMenu = true;
+    tomY = 2*height/5;
+    speed = 0;
+  }
+} 
+
 void backgroundFlappy() {
+  textFont(flap20);
   noStroke();
   fill(111, 206, 255);
   rect(-1, 0, 601, 495);
