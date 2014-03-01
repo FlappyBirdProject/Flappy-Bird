@@ -54,7 +54,6 @@ void draw() {
     }
   }
   if (play) {
-    drawFlappy();
     checkFlappy();
 
     image(tomceji, width/2, tomY);
@@ -81,8 +80,6 @@ void draw() {
 
     //checks if he hits ground ... will add check for him hitting pipes once pipes are added!
     if (tomY >= 458) {
-      speed = 0;
-      tomY = 458;
       gameOver = true;
       play = false;
     }
@@ -94,6 +91,13 @@ void draw() {
   if (gameOver) {
     textAlign(CENTER);
     text("(this is just a test ending screen; we need fonts and stuff)\nYOU LOST WITH A SCORE OF:\n" + score, 300, 250);
+    text("Press and key to continue", 300, 400);
+    if (keyPressed) {
+      gameOver = false;
+      mainMenu = true;
+      tomY = 2*height/5;
+      speed = 0;
+    }
   }
 }
 
@@ -136,9 +140,6 @@ void drawScoresButton() {
       mainMenu = false;
     }
   }
-}
-
-void drawFlappy() {
 }
 
 void checkFlappy() {
