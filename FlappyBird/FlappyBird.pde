@@ -4,6 +4,7 @@ PImage playButton;
 PImage scoresButton;
 PImage playButtonHighlight;
 PImage scoresButtonHighlight;
+PFont flap;
 boolean mainMenu;
 boolean play;
 boolean scoreMenu;
@@ -31,9 +32,11 @@ void setup() {
   scoresButton = loadImage("scoresButton.png");
   playButtonHighlight = loadImage("playButtonHighlight.png");
   scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
+  flap = loadFont("04b19-20.vlw");
   backgroundFlappy();
   mainMenu = true;
   tomY = 2*height/5;
+  textFont(flap);
 }
 
 void draw() {
@@ -90,6 +93,7 @@ void draw() {
 
   if (gameOver) {
     textAlign(CENTER);
+    fill(255);
     text("(this is just a test ending screen; we need fonts and stuff)\nYOU LOST WITH A SCORE OF:\n" + score, 300, 250);
     text("Press and key to continue", 300, 400);
     if (keyPressed) {
