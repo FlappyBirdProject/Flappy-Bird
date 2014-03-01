@@ -133,7 +133,7 @@ void drawScoreMenu() {
   fill(255);
   textAlign(CENTER);
   textFont(flap48);
-  text("Scores", 300, 100);
+  text("Top 10 Scores", 300, 100);
   textFont(flap20);
   Table tableScores = loadTable("data/scores.csv", "header");
   textAlign(RIGHT);
