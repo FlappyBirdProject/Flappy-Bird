@@ -1,16 +1,25 @@
-PImage tomceji;//56x74
+//Declaring the Image names and what they hold
+PImage tomceji; //56x74
 PImage logo;
 PImage playButton;
 PImage scoresButton;
 PImage playButtonHighlight;
 PImage scoresButtonHighlight;
+
+//The Beautiful font
 PFont flap;
+
+//The menu booleans
 boolean mainMenu;
 boolean play;
 boolean scoreMenu;
+boolean gameOver;
+
+//Other game booleans
 boolean callPipe = true;
 boolean goUp;
-boolean gameOver;
+
+//Game variables with location and timing/scoring
 float logoX = 300;
 float logoY = 250;
 float speedOfLogo = .5;
@@ -19,13 +28,20 @@ float grav = 0.15;
 int randPipe;
 int tomY;
 int timeStart;
-int waitStart = 3000;
+int waitStart = 5000;
 int score;
+int yTop;
+int yBot;
+int xRight;
+
+//This here is Java in a nutshell.... (I hate Oracle -Eric)
 pipe pipe = new pipe();
 
 void setup() {
   imageMode(CENTER);
   size(600, 600);
+
+  //loading the images fonts and soun to RAM
   tomceji = loadImage("tomceji.jpg");
   logo = loadImage("logo.png");
   playButton = loadImage("playButton.png"); 
@@ -40,6 +56,10 @@ void setup() {
 }
 
 void draw() {
+
+  yTop = tomY - 37;
+  yBot = tomY + 37;
+  xRight = 328;
 
   backgroundFlappy();
 
@@ -82,7 +102,7 @@ void draw() {
     tomY += speed;
 
     //checks if he hits ground ... will add check for him hitting pipes once pipes are added!
-    if (tomY >= 458) {
+    if (tomY >= 458 || yTop <= 37) {
       gameOver = true;
       play = false;
     }
@@ -159,7 +179,7 @@ void keyPressed() {
       goUp = false;
     }
     else {
-      speed = -3.25;
+      speed = -5;
       goUp = true;
     }
   }
@@ -189,4 +209,5 @@ public class pipe {
      }*/
   }
 }
+
 
