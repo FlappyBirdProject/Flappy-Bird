@@ -35,6 +35,13 @@ int score;
 int yTop;
 int yBot;
 int xRight;
+int rowS;
+
+String in = "";
+String out = "";
+String[] saveStuff = new String[2];
+
+Table table;
 
 //This here is Java in a nutshell.... (I hate Oracle -Eric)
 pipe pipe = new pipe();
@@ -55,6 +62,7 @@ void setup() {
   backgroundFlappy();
   mainMenu = true;
   tomY = 2*height/5;
+  table = loadTable("data/scores.csv", "header");
 }
 
 void draw() {
@@ -92,6 +100,9 @@ void drawMainMenu() {
 }
 
 void playGame() {
+  score = 0;
+  out = "";
+  in = "";
   textFont(flap20);
   checkFlappy();
   image(tomceji, width/2, tomY);
@@ -123,20 +134,58 @@ void drawScoreMenu() {
   textAlign(CENTER);
   textFont(flap48);
   text("Scores", 300, 100);
+  textFont(flap20);
+  Table tableScores = loadTable("data/scores.csv", "header");
+  textAlign(RIGHT);
+  text("SCORE", 500, 150);
+  text(tableScores.getInt(0, 1), 500, 185);
+  textAlign(LEFT);
+  text("PLAYER", 100, 150);
+  text(tableScores.getString(0, 0), 100, 185);
 }
 
 void gameOverMenu() {
   textAlign(CENTER);
   fill(255);
-  text("(this is just a test ending screen; we need fonts and stuff)\nYOU LOST WITH A SCORE OF:\n" + score, 300, 250);
-  text("Press the '+' key to continue", 300, 400);
-  if (keyPressed && key == '+') {
+  text("YOU LOST WITH A SCORE OF:\n" + score, 300, 150);
+  text("Click anywhere to continue without saving score", 300, 250);
+  text("Type your name:", 300, 350);
+  text(in + "\nPress the return key when you are done...", 300, 375);
+  if (mousePressed) {
     gameOver = false;
     mainMenu = true;
     tomY = 2*height/5;
     speed = 0;
   }
-} 
+}
+
+void keyPressed() {
+  if (gameOver) {
+    if (key == '\n') {
+      out = in;
+      int rows = table.getRowCount();
+      table.setString(rows, 0, out);
+      table.setInt(rows, 1, score);
+      saveTable(table, "data/scores.csv");
+      gameOver = false;
+      mainMenu = true;
+    }
+    else {
+      in += key;
+    }
+  }
+  if (play) {
+    if (key == ' ') {
+      if (goUp) {
+        goUp = false;
+      }
+      else {
+        speed = -5;
+        goUp = true;
+      }
+    }
+  }
+}
 
 void backgroundFlappy() {
   textFont(flap20);
@@ -187,18 +236,6 @@ void drawLogo() {
   image(logo, 300, 150);
 }
 
-void keyPressed() {
-  if (key == ' ') {
-    if (goUp) {
-      goUp = false;
-    }
-    else {
-      speed = -5;
-      goUp = true;
-    }
-  }
-}
-
 public class pipe {
 
   /*int topY;
@@ -223,5 +260,4 @@ public class pipe {
      }*/
   }
 }
-
 
