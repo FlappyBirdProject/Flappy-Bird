@@ -8,10 +8,14 @@ boolean mainMenu;
 boolean play;
 boolean scoreMenu;
 boolean callPipe = true;
+boolean goUp;
 float logoX = 300;
 float logoY = 250;
 float speedOfLogo = .5;
+float speed;
+float grav = 0.1;
 int randPipe;
+int tomY;
 
 void setup() {
   imageMode(CENTER);
@@ -24,10 +28,11 @@ void setup() {
   scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
   backgroundFlappy();
   mainMenu = true;
+  tomY = 2*height/5;
 }
 
 void draw() {
-  
+
   randPipe = (int)random(4);
 
   backgroundFlappy();
@@ -48,24 +53,22 @@ void draw() {
   if (play) {
     drawFlappy();
     checkFlappy();
+    pipes.drawPipes(randPipe);
 
-    if (callPipe) {
-      switch(randPipe) {
-      case 0: 
-        pipes.drawPipes(1);
-        break;
-      case 1: 
-        pipes.drawPipes(2);
-        break;
-      case 2:
-        pipes.drawPipes(3);
-        break;
-      case 3:
-        pipes.drawPipes(4);
-        break;
-      }
-      //callPipe = false;
+    image(tomceji, width/2, tomY);
+
+    if (goUp) {
+      speed -= grav;
     }
+    else {
+      speed += grav;
+    }
+
+    if (speed <= 0) {
+      goUp = false;
+    }
+    
+        tomY += speed;
   }
 
   if (scoreMenu) {
@@ -122,9 +125,28 @@ void drawLogo() {
   image(logo, 300, 150);
 }
 
+void keyPressed() {
+  if (goUp) {
+    goUp = false;
+  }
+  else {
+    speed = -3.25;
+    goUp = true;
+  }
+}
+
 static class pipes {
   static void drawPipes(int i) {
-    
+    switch(i) {
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    }
   }
 }
 
