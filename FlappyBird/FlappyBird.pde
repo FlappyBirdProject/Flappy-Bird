@@ -9,13 +9,18 @@ boolean play;
 boolean scoreMenu;
 boolean callPipe = true;
 boolean goUp;
+boolean gameOver;
 float logoX = 300;
 float logoY = 250;
 float speedOfLogo = .5;
 float speed;
-float grav = 0.1;
+float grav = 0.15;
 int randPipe;
 int tomY;
+int timeStart;
+int waitStart = 3000;
+int score;
+pipe pipe = new pipe();
 
 void setup() {
   imageMode(CENTER);
@@ -32,8 +37,6 @@ void setup() {
 }
 
 void draw() {
-
-  randPipe = (int)random(4);
 
   backgroundFlappy();
 
@@ -53,9 +56,15 @@ void draw() {
   if (play) {
     drawFlappy();
     checkFlappy();
-    pipes.drawPipes(randPipe);
 
     image(tomceji, width/2, tomY);
+
+    //make first pipe appear here
+    if (millis() - timeStart >= waitStart) {
+      print("test");
+      //pipe.drawPipe(some value here; we need to decide how to determine pipe value);
+      timeStart = millis() - 1500;
+    }
 
     if (goUp) {
       speed -= grav;
@@ -67,14 +76,26 @@ void draw() {
     if (speed <= 0) {
       goUp = false;
     }
-    
-        tomY += speed;
+
+    tomY += speed;
+
+    //checks if he hits ground ... will add check for him hitting pipes once pipes are added!
+    if (tomY >= 458) {
+      speed = 0;
+      tomY = 458;
+      gameOver = true;
+      play = false;
+    }
   }
 
   if (scoreMenu) {
   }
-}
 
+  if (gameOver) {
+    textAlign(CENTER);
+    text("(this is just a test ending screen; we need fonts and stuff)\nYOU LOST WITH A SCORE OF:\n" + score, 300, 250);
+  }
+}
 
 void backgroundFlappy() {
   noStroke();
@@ -87,6 +108,8 @@ void backgroundFlappy() {
   fill(122, 126, 4);
   textAlign(RIGHT);
   text("Made by Fisher Darling and Eric Lindau", 16*width/17, 595);
+  fill(0, 230, 0);
+  stroke(0, 30, 0);
 }
 
 void drawPlayButton() {
@@ -126,27 +149,39 @@ void drawLogo() {
 }
 
 void keyPressed() {
-  if (goUp) {
-    goUp = false;
-  }
-  else {
-    speed = -3.25;
-    goUp = true;
+  if (key == ' ') {
+    if (goUp) {
+      goUp = false;
+    }
+    else {
+      speed = -3.25;
+      goUp = true;
+    }
   }
 }
 
-static class pipes {
-  static void drawPipes(int i) {
-    switch(i) {
-    case 0:
-      break;
-    case 1:
-      break;
-    case 2:
-      break;
-    case 3:
-      break;
-    }
+public class pipe {
+
+  /*int topY;
+   int botY;
+   int pipeY;*/
+
+
+  void drawPipe(float i) {
+    //I think we should just make a formula relating the randomly generated int to the rect drawing!
+
+    /*switch(i) {
+     case 0:
+     break;
+     case 1:
+     rect(coorX, topY, 50, pipeY);
+     rect(coorX, botY, 50, pipeY);
+     break;
+     case 2:
+     break;
+     case 3:
+     break;
+     }*/
   }
 }
 
