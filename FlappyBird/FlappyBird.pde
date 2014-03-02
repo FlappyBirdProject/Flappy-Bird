@@ -10,8 +10,6 @@ PImage scoresButtonHighlight;
 PFont flap20;
 //size 48
 PFont flap48;
-//size 10
-PFont flap10;
 
 //The menu booleans
 boolean mainMenu;
@@ -63,7 +61,6 @@ void setup() {
   scoresButton = loadImage("scoresButton.png");
   playButtonHighlight = loadImage("playButtonHighlight.png");
   scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
-  flap10 = loadFont("04b19-10.vlw");
   flap20 = loadFont("04b19-20.vlw");
   flap48 = loadFont("04b19-48.vlw");
   backgroundFlappy();
