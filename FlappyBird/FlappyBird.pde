@@ -10,12 +10,15 @@ PImage scoresButtonHighlight;
 PFont flap20;
 //size 48
 PFont flap48;
+//size 10
+PFont flap10;
 
 //The menu booleans
 boolean mainMenu;
 boolean play;
 boolean scoreMenu;
 boolean gameOver;
+boolean pipes;
 
 //Other game booleans
 boolean callPipe = true;
@@ -29,19 +32,21 @@ float speed;
 float grav = 0.15;
 int randPipe;
 int tomY;
-int timeStart;
 int waitStart = 5000;
 int score;
 int yTop;
 int yBot;
 int xRight;
-int rowS;
+int z;
+float[] randPipes = { random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500) };
 
 String in = "";
 String out = "";
-String[] saveStuff = new String[2];
 
 Table table;
+
+IntList scoreVals;
+StringList nameStr;
 
 //This here is Java in a nutshell.... (I hate Oracle -Eric)
 pipe pipe = new pipe();
@@ -49,20 +54,22 @@ pipe pipe = new pipe();
 void setup() {
   imageMode(CENTER);
   size(600, 600);
-
-  //loading the images fonts and soun to RAM
+  scoreVals = new IntList();
+  nameStr = new StringList();
+  //loading the images fonts and sound to RAM
   tomceji = loadImage("tomceji.jpg");
   logo = loadImage("logo.png");
   playButton = loadImage("playButton.png"); 
   scoresButton = loadImage("scoresButton.png");
   playButtonHighlight = loadImage("playButtonHighlight.png");
   scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
+  flap10 = loadFont("04b19-10.vlw");
   flap20 = loadFont("04b19-20.vlw");
   flap48 = loadFont("04b19-48.vlw");
   backgroundFlappy();
   mainMenu = true;
   tomY = 2*height/5;
-  table = loadTable("data/scores.csv", "header");
+  table = loadTable("scores.csv", "header");
 }
 
 void draw() {
@@ -107,10 +114,8 @@ void playGame() {
   checkFlappy();
   image(tomceji, width/2, tomY);
   //make first pipe appear here
-  if (millis() - timeStart >= waitStart) {
-    print("test");
-    //pipe.drawPipe(some value here; we need to decide how to determine pipe value);
-    timeStart = millis() - 1500;
+  if (millis() >= waitStart) {
+    pipes = true;
   }
   if (goUp) {
     speed -= grav;
@@ -127,21 +132,25 @@ void playGame() {
     gameOver = true;
     play = false;
   }
+  if (pipes) {}
 }
 
 void drawScoreMenu() {
   fill(255);
   textAlign(CENTER);
   textFont(flap48);
-  text("Top 10 Scores", 300, 100);
+  text("Scores", 300, 100);
   textFont(flap20);
-  Table tableScores = loadTable("data/scores.csv", "header");
+  for (z = 0; z < table.getRowCount(); z++) {
+    textAlign(RIGHT);
+    text(table.getInt(z, 1), 500, 185 + z * 35);
+    textAlign(LEFT);
+    text(table.getString(z, 0), 100, 185 + z * 35);
+  }
   textAlign(RIGHT);
   text("SCORE", 500, 150);
-  text(tableScores.getInt(0, 1), 500, 185);
   textAlign(LEFT);
   text("PLAYER", 100, 150);
-  text(tableScores.getString(0, 0), 100, 185);
 }
 
 void gameOverMenu() {
@@ -159,6 +168,9 @@ void gameOverMenu() {
   }
 }
 
+void mousePressed() {
+}
+
 void keyPressed() {
   if (gameOver) {
     if (key == '\n') {
@@ -167,8 +179,8 @@ void keyPressed() {
       table.setString(rows, 0, out);
       table.setInt(rows, 1, score);
       saveTable(table, "data/scores.csv");
-      gameOver = false;
       mainMenu = true;
+      gameOver = false;
     }
     else {
       in += key;
@@ -198,7 +210,19 @@ void backgroundFlappy() {
   rect(-11, 500, 621, 110);
   fill(122, 126, 4);
   textAlign(RIGHT);
-  text("Made by Fisher Darling and Eric Lindau", 16*width/17, 595);
+  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
+  textAlign(LEFT);
+  text("main menu", 5, 595);
+  if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
+    fill(0, 0, 255);
+    text("main menu", 5, 595);
+    if (mousePressed) {
+      mainMenu = true;
+      play = false;
+      scoreMenu = false;
+      gameOver = false;
+    }
+  }
   fill(0, 230, 0);
   stroke(0, 30, 0);
 }
@@ -242,8 +266,18 @@ public class pipe {
    int botY;
    int pipeY;*/
 
+  int pipeX = 615;
+  int i = 200;
 
   void drawPipe(float i) {
+    fill(0, 255, 0);
+    rect(pipeX, - 1, 80, i);
+    rect(pipeX - 20, i - 25, 120, 35);
+    rect(pipeX, i + 200, 80, height);
+    rect(pipeX - 20, i + 185, 120, 35);
+    pipeX -= 1.7;
+
+
     //I think we should just make a formula relating the randomly generated int to the rect drawing!
 
     /*switch(i) {
