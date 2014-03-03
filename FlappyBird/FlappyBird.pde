@@ -36,7 +36,7 @@ int yTop;
 int yBot;
 int xRight;
 int z;
-float[] randPipes = { random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500), random(100, 500) };
+int y = 185;
 
 String in = "";
 String out = "";
@@ -86,6 +86,9 @@ void draw() {
   if (gameOver) {
     gameOverMenu();
   }
+  if (scoreMenu == false) {
+    y = 185;
+  }
 }
 
 void drawMainMenu() {
@@ -129,25 +132,59 @@ void playGame() {
     gameOver = true;
     play = false;
   }
-  if (pipes) {}
+  if (pipes) {
+  }
 }
 
 void drawScoreMenu() {
   fill(255);
+  for (z = 0; z < table.getRowCount(); z++) {
+    textAlign(RIGHT);
+    text(table.getInt(z, 1), 500, y + z * 35);
+    textAlign(LEFT);
+    text(table.getString(z, 0), 100, y + z * 35);
+  }
+  fill(111, 206, 255);
+  noStroke();
+  rect(0, 0, 600, 160);
+  strokeWeight(10);
+  stroke(54, 188, 2);
+  fill(234, 237, 165);
+  rect(-11, 500, 621, 110);
+  fill(255);
   textAlign(CENTER);
+  textFont(flap20);
+  text("Press the up and down keys to navigate", 300, 50);
   textFont(flap48);
   text("Scores", 300, 100);
   textFont(flap20);
-  for (z = 0; z < table.getRowCount(); z++) {
-    textAlign(RIGHT);
-    text(table.getInt(z, 1), 500, 185 + z * 35);
-    textAlign(LEFT);
-    text(table.getString(z, 0), 100, 185 + z * 35);
-  }
   textAlign(RIGHT);
   text("SCORE", 500, 150);
   textAlign(LEFT);
   text("PLAYER", 100, 150);
+  textAlign(RIGHT);
+  fill(122, 126, 4);
+  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
+  textAlign(LEFT);
+  text("main menu", 5, 595);
+  if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
+    fill(0, 0, 255);
+    text("main menu", 5, 595);
+    if (mousePressed) {
+      mainMenu = true;
+      play = false;
+      scoreMenu = false;
+      gameOver = false;
+    }
+  }
+  if (keyPressed && key == CODED) {
+    if (keyCode == UP) {
+      y -= 2;
+    }
+    if (keyCode == DOWN) {
+      y += 2;
+    }
+  }
 }
 
 void gameOverMenu() {
@@ -157,7 +194,20 @@ void gameOverMenu() {
   text("Click anywhere to continue without saving score", 300, 250);
   text("Type your name:", 300, 350);
   text(in + "\nPress the return key when you are done...", 300, 375);
-  if (mousePressed) {
+}
+
+void mousePressed() {
+  if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
+    fill(0, 0, 255);
+    text("main menu", 5, 595);
+    if (mousePressed) {
+      mainMenu = true;
+      play = false;
+      scoreMenu = false;
+      gameOver = false;
+    }
+  }
+  if (gameOver) {
     gameOver = false;
     mainMenu = true;
     tomY = 2*height/5;
@@ -165,8 +215,6 @@ void gameOverMenu() {
   }
 }
 
-void mousePressed() {
-}
 
 void keyPressed() {
   if (gameOver) {
@@ -179,8 +227,11 @@ void keyPressed() {
       mainMenu = true;
       gameOver = false;
     }
-    else {
+    if (key != '\n' && key != BACKSPACE) {
       in += key;
+    }
+    if (key == BACKSPACE && in.length() > 0) {
+      in = in.substring(0, in.length() - 1);
     }
   }
   if (play) {
@@ -209,15 +260,17 @@ void backgroundFlappy() {
   textAlign(RIGHT);
   text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
   textAlign(LEFT);
-  text("main menu", 5, 595);
-  if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
-    fill(0, 0, 255);
+  if (mainMenu == false) {
     text("main menu", 5, 595);
-    if (mousePressed) {
-      mainMenu = true;
-      play = false;
-      scoreMenu = false;
-      gameOver = false;
+    if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
+      fill(0, 0, 255);
+      text("main menu", 5, 595);
+      if (mousePressed) {
+        mainMenu = true;
+        play = false;
+        scoreMenu = false;
+        gameOver = false;
+      }
     }
   }
   fill(0, 230, 0);
@@ -273,22 +326,6 @@ public class pipe {
     rect(pipeX, i + 200, 80, height);
     rect(pipeX - 20, i + 185, 120, 35);
     pipeX -= 1.7;
-
-
-    //I think we should just make a formula relating the randomly generated int to the rect drawing!
-
-    /*switch(i) {
-     case 0:
-     break;
-     case 1:
-     rect(coorX, topY, 50, pipeY);
-     rect(coorX, botY, 50, pipeY);
-     break;
-     case 2:
-     break;
-     case 3:
-     break;
-     }*/
   }
 }
 
