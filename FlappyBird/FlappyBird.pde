@@ -5,6 +5,7 @@ PImage playButton;
 PImage scoresButton;
 PImage playButtonHighlight;
 PImage scoresButtonHighlight;
+PImage returnButton;
 
 //The Beautiful 20 size font
 PFont flap20;
@@ -61,6 +62,7 @@ void setup() {
   scoresButton = loadImage("scoresButton.png");
   playButtonHighlight = loadImage("playButtonHighlight.png");
   scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
+  returnButton = loadImage("return_button.png");
   flap20 = loadFont("04b19-20.vlw");
   flap48 = loadFont("04b19-48.vlw");
   backgroundFlappy();
