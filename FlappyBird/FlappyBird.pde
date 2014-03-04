@@ -16,11 +16,9 @@ boolean mainMenu;
 boolean play;
 boolean scoreMenu;
 boolean gameOver;
-boolean pipes;
-
-//Other game booleans
-boolean callPipe = true;
+boolean randPipe;
 boolean goUp;
+boolean draw;
 
 //Game variables with location and timing/scoring
 float logoX = 300;
@@ -28,7 +26,8 @@ float logoY = 250;
 float speedOfLogo = .5;
 float speed;
 float grav = 0.15;
-int randPipe;
+float i;
+
 int tomY;
 int waitStart = 5000;
 int score;
@@ -37,6 +36,7 @@ int yBot;
 int xRight;
 int z;
 int y = 185;
+int wait;
 
 String in = "";
 String out = "";
@@ -78,6 +78,7 @@ void draw() {
     drawMainMenu();
   }
   if (play) {
+    gameOver = false;
     playGame();
   }
   if (scoreMenu) {
@@ -114,9 +115,14 @@ void playGame() {
   checkFlappy();
   image(tomceji, width/2, tomY);
   //make first pipe appear here
-  if (millis() >= waitStart && pipes) {
-    pipe.randPipe();
-    pipes = false;
+  if (millis() - wait >= waitStart) {
+    randPipe = true;
+    draw = true;
+  }
+  if (randPipe) {
+    i = random(100, 400);
+    randPipe = false;
+    println(i);
   }
   if (goUp) {
     speed -= grav;
@@ -132,8 +138,6 @@ void playGame() {
   if (tomY >= 458 || yTop <= 37) {
     gameOver = true;
     play = false;
-  }
-  if (pipes) {
   }
 }
 
@@ -318,20 +322,10 @@ public class pipe {
    int pipeY;*/
 
   int pipeX = 615;
-  boolean pipeRand = true;
-  float j;
-
-  void randPipe() {
-    if(pipeRand) {
-    j = random(100, 500);
-    pipeRand = false;
-    }
-    drawPipe(j);
-  }
 
   void drawPipe(float i) {
     fill(0, 255, 0);
-    rect(pipeX, - 1, 80, i);
+    rect(pipeX, i - 1, 80, i);
     rect(pipeX - 20, i - 25, 120, 35);
     rect(pipeX, i + 200, 80, height);
     rect(pipeX - 20, i + 185, 120, 35);
