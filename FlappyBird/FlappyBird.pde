@@ -19,14 +19,17 @@ boolean gameOver;
 boolean randPipe;
 boolean goUp;
 boolean draw;
+boolean time = true;
+boolean game = true;
 
 //Game variables with location and timing/scoring
 float logoX = 300;
 float logoY = 250;
 float speedOfLogo = .5;
 float speed;
-float grav = 0.15;
+float grav = 0.2;
 float i;
+float pipeSpd = 1.7;
 
 int tomY;
 int waitStart = 5000;
@@ -37,6 +40,8 @@ int xRight;
 int z;
 int y = 185;
 int wait;
+int pipeX = 615;
+int pipeX2 = 615;
 
 String in = "";
 String out = "";
@@ -44,6 +49,7 @@ String out = "";
 Table table;
 
 IntList scoreVals;
+IntList pipes;
 StringList nameStr;
 
 //This here is Java in a nutshell.... (I hate Oracle -Eric)
@@ -53,6 +59,7 @@ void setup() {
   imageMode(CENTER);
   size(600, 600);
   scoreVals = new IntList();
+  pipes = new IntList();
   nameStr = new StringList();
   //loading the images fonts and sound to RAM
   tomceji = loadImage("tomceji.jpg");
@@ -70,6 +77,9 @@ void setup() {
 }
 
 void draw() {
+  if (pipeX == width / 2) {
+   game = false; 
+  }
   yTop = tomY - 37;
   yBot = tomY + 37;
   xRight = 328;
@@ -78,7 +88,6 @@ void draw() {
     drawMainMenu();
   }
   if (play) {
-    gameOver = false;
     playGame();
   }
   if (scoreMenu) {
@@ -115,16 +124,24 @@ void playGame() {
   checkFlappy();
   image(tomceji, width/2, tomY);
   //make first pipe appear here
-  if (millis() - wait >= waitStart) {
+  if (millis() >= waitStart && time) {
     randPipe = true;
     draw = true;
+    time = false;
   }
   if (randPipe) {
-    i = random(100, 400);
+    i = random(75, 300);
     randPipe = false;
     println(i);
   }
-  if (goUp) {
+  if (draw) {
+   pipe.drawPipe1(i); 
+   if (pipeX <= -100) {
+    time = true;
+    pipeX = 615;
+   }
+  }
+  if (goUp && game) {
     speed -= grav;
   }
   else {
@@ -193,6 +210,9 @@ void drawScoreMenu() {
 }
 
 void gameOverMenu() {
+  if(play) {
+   gameOver = false; 
+  }
   textAlign(CENTER);
   fill(255);
   text("YOU LOST WITH A SCORE OF:\n" + score, 300, 150);
@@ -202,16 +222,6 @@ void gameOverMenu() {
 }
 
 void mousePressed() {
-  if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
-    fill(0, 0, 255);
-    text("main menu", 5, 595);
-    if (mousePressed) {
-      mainMenu = true;
-      play = false;
-      scoreMenu = false;
-      gameOver = false;
-    }
-  }
   if (gameOver) {
     gameOver = false;
     mainMenu = true;
@@ -291,6 +301,7 @@ void drawPlayButton() {
     if (mousePressed) {
       play = true;
       mainMenu = false;
+      gameOver = false;
     }
   }
 }
@@ -321,15 +332,22 @@ public class pipe {
    int botY;
    int pipeY;*/
 
-  int pipeX = 615;
-
-  void drawPipe(float i) {
+  void drawPipe1(float i) {
     fill(0, 255, 0);
-    rect(pipeX, i - 1, 80, i);
-    rect(pipeX - 20, i - 25, 120, 35);
-    rect(pipeX, i + 200, 80, height);
-    rect(pipeX - 20, i + 185, 120, 35);
-    pipeX -= 1.7;
+    rect(pipeX,  - 1, 60, i);
+    rect(pipeX - 20, i - 25, 100, 35);
+    rect(pipeX, i + 200, 60, height);
+    rect(pipeX - 20, i + 185, 100, 35);
+    pipeX -= pipeSpd;
+  }
+  
+  void drawPipe2(float i) {
+    fill(0, 255, 0);
+    rect(pipeX2,  - 1, 60, i);
+    rect(pipeX2 - 20, i - 25, 100, 35);
+    rect(pipeX2, i + 200, 60, height);
+    rect(pipeX2 - 20, i + 185, 100, 35);
+    pipeX2 -= pipeSpd;
   }
 }
 
