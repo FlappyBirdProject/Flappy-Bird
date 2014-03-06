@@ -29,6 +29,7 @@ float speedOfLogo = .5;
 float speed;
 float grav = 0.2;
 float i;
+float j;
 float pipeSpd = 1.7;
 
 int tomY;
@@ -78,7 +79,7 @@ void setup() {
 
 void draw() {
   if (pipeX == width / 2) {
-   game = false; 
+    game = false;
   }
   yTop = tomY - 37;
   yBot = tomY + 37;
@@ -131,21 +132,23 @@ void playGame() {
   }
   if (randPipe) {
     i = random(75, 300);
+    j = random(75, 300);
     randPipe = false;
     println(i);
+    println(j);
   }
   if (draw) {
-   pipe.drawPipe1(i); 
-   if (pipeX <= -100) {
-    time = true;
-    pipeX = 615;
-   }
+    pipe.drawPipe(i, j); 
+    if (pipeX <= -810) {
+      pipeX = 615;
+      time = true;
+    }
   }
   if (goUp && game) {
     speed -= grav;
   }
   else {
-    speed += grav;
+    //speed += grav;
   }
   if (speed <= 0) {
     goUp = false;
@@ -210,8 +213,8 @@ void drawScoreMenu() {
 }
 
 void gameOverMenu() {
-  if(play) {
-   gameOver = false; 
+  if (play) {
+    gameOver = false;
   }
   textAlign(CENTER);
   fill(255);
@@ -328,26 +331,22 @@ void drawLogo() {
 
 public class pipe {
 
-  /*int topY;
-   int botY;
-   int pipeY;*/
+  void drawPipe(float i, float j) {
+    checkFlappy();
 
-  void drawPipe1(float i) {
     fill(0, 255, 0);
-    rect(pipeX,  - 1, 60, i);
+    rect(pipeX, - 1, 60, i);
     rect(pipeX - 20, i - 25, 100, 35);
     rect(pipeX, i + 200, 60, height);
     rect(pipeX - 20, i + 185, 100, 35);
-    pipeX -= pipeSpd;
-  }
-  
-  void drawPipe2(float i) {
+
     fill(0, 255, 0);
-    rect(pipeX2,  - 1, 60, i);
-    rect(pipeX2 - 20, i - 25, 100, 35);
-    rect(pipeX2, i + 200, 60, height);
-    rect(pipeX2 - 20, i + 185, 100, 35);
-    pipeX2 -= pipeSpd;
+    rect(pipeX + 710, - 1, 60, j);
+    rect(pipeX + 690, j - 25, 100, 35);
+    rect(pipeX + 710, j + 200, 60, height);
+    rect(pipeX + 690, j + 185, 100, 35);
+
+    pipeX -= 2;
   }
 }
 
