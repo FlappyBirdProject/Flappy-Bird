@@ -29,14 +29,12 @@ int pipeSpd = 2; //Number of pixels to move pipes by every frame
 int tomY; //Y coordinate of Tom's face ingame
 int waitStart = 5000; //Time (in milliseconds) to wait for first pipe to draw
 int score; //Score held for player
-int yTop;
-int yBot;
-int xRight;
-int z;
-int y = 185;
-int wait;
-int pipeX = 615;
-int pipeX2 = 615;
+int yTop; //Top of Tom
+int yBot; //Bot of Tom
+int xRight; //Right of Tom ... All of these coords are used to check if Tom hits a pipe or the ground
+int z; //Used in for statements to check the number of rows in the table (CSV) file to print onto score screen
+int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
+int pipeX = 615; //Initial x coordinate of first pipe
 
 String in = "";
 String out = "";
