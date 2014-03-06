@@ -1,40 +1,34 @@
-//Declaring the Image names and what they hold
-PImage tomceji; //56x74
-PImage logo;
-PImage playButton;
-PImage scoresButton;
-PImage playButtonHighlight;
-PImage scoresButtonHighlight;
+PImage tomceji; //Declare Tom's picture ... 56x74
+PImage logo; //Declare "Flappy Tom" logo
+PImage playButton; //Declare play button's image
+PImage scoresButton; //Declare score button's image
+PImage playButtonHighlight; //Declare the image of the play button when highlighted
+PImage scoresButtonHighlight; //Declare the image of the score button when highlighted
 
-//The Beautiful 20 size font
-PFont flap20;
-//size 48
-PFont flap48;
+PFont flap20; //The beautiful 20 size font
+PFont flap48; //size 48
 
-//The menu booleans
-boolean mainMenu;
-boolean play;
-boolean scoreMenu;
-boolean gameOver;
-boolean randPipe;
-boolean goUp;
-boolean draw;
-boolean time = true;
-boolean game = true;
+boolean mainMenu; //Checks if main menu is active
+boolean play; //Checks if game is playing
+boolean scoreMenu; //Checks if score menu is active
+boolean gameOver; //Checks if player loses
+boolean randPipe; //Checks if new random values for pipes should be generated
+boolean goUp; //Checks if player wants to "flap" (move up)
+boolean draw; //Checks if pipes should be drawn/redrawn
+boolean time = true; //Along with the millis() function, this boolean determines at which times to generate/draw pipes
+boolean game = true; //If player hits pipe, game will be false and cause the player to fall and lose
 
-//Game variables with location and timing/scoring
-float logoX = 300;
-float logoY = 250;
-float speedOfLogo = .5;
-float speed;
-float grav = 0.2;
-float i;
-float j;
-float pipeSpd = 1.7;
+float logoY = 250; //Y coordinate of Tom's face on the main menu
+float speedOfLogo = .5; //Speed of Tom's face on the main menu
+float speed; //Speed of Tom's face ingame
+float grav = 0.2; //"Force" applied downward on Tom's face ingame to simulate gravity
+float i; //First random float (for first pipe drawn in drawPipe)
+float j; //Second random float (for second pipe drawn in drawPipe)
 
-int tomY;
-int waitStart = 5000;
-int score;
+int pipeSpd = 2; //Number of pixels to move pipes by every frame
+int tomY; //Y coordinate of Tom's face ingame
+int waitStart = 5000; //Time (in milliseconds) to wait for first pipe to draw
+int score; //Score held for player
 int yTop;
 int yBot;
 int xRight;
@@ -78,9 +72,6 @@ void setup() {
 }
 
 void draw() {
-  if (pipeX == width / 2) {
-    game = false;
-  }
   yTop = tomY - 37;
   yBot = tomY + 37;
   xRight = 328;
@@ -107,7 +98,7 @@ void drawMainMenu() {
   drawPlayButton();
   drawScoresButton();
   drawLogo();
-  image(tomceji, logoX, logoY);
+  image(tomceji, width / 2, logoY);
   logoY += speedOfLogo;
   if (logoY > 265) {
     speedOfLogo *= -1;
