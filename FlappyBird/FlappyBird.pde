@@ -17,6 +17,8 @@ boolean draw; //Checks if pipes should be drawn/redrawn
 boolean time = true; //Along with the millis() function, this boolean determines at which times to generate/draw pipes
 boolean game = true; //If player hits pipe, game will be false and cause the player to fall and lose
 boolean randPipe;
+boolean draw1;
+boolean draw2;
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
@@ -35,34 +37,15 @@ int yBot; //Bot of Tom
 int xRight; //Right of Tom ... All of these coords are used to check if Tom hits a pipe or the ground
 int z; //Used in for statements to check the number of rows in the table (CSV) file to print onto score screen
 int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
-int pipeX = 615; //Initial x coordinate of first pipe
-int pipeX2 = 615; //Initial x coordinate of second pipe
-int zwag;
-int m;
-int n;
-int u;
-int ord;
-int wait;
 
 String in = "";
 String out = "";
 
 Table table;
 
-IntList scoreVals;
-IntList pipes;
-StringList nameStr;
-
-//This here is Java in a nutshell.... (I hate Oracle -Eric)
-pipe pipe = new pipe();
-
 void setup() {
   imageMode(CENTER);
   size(600, 600);
-  scoreVals = new IntList();
-  pipes = new IntList();
-  nameStr = new StringList();
-  //loading the images fonts and sound to RAM
   tomceji = loadImage("tomceji.jpg");
   logo = loadImage("logo.png");
   playButton = loadImage("playButton.png"); 
@@ -75,10 +58,6 @@ void setup() {
   mainMenu = true;
   tomY = 2*height/5;
   table = loadTable("scores.csv", "header");
-  for (zwag = 0; zwag < 200; zwag++) {
-    pipes.append(zwag);
-    pipes.set(zwag, (int)random(100, 300));
-  }
 }
 
 void draw() {
@@ -125,31 +104,12 @@ void playGame() {
   textFont(flap20);
   checkFlappy();
   image(tomceji, width/2, tomY);
-  //make first pipe appear here
-  if (millis() >= waitStart && time) {
-    randPipe = true;
-    //draw = true;
-    time = false;
-  }
-  if (randPipe) {
-    n = pipes.get(ord);
-    u = pipes.get(ord + 1);
-    ord += 2;
-    randPipe = false;
-  }
-   if (millis() - wait >= waitStart) {
-   pipe.drawPipe1();
-   wait = 4000;
-   }
-   if (millis() - wait + 3000 >= waitStart) {
-   pipe.drawPipe2();
-   wait = 4000;
-   }
+
   if (goUp && game) {
     speed -= grav;
   }
   else {
-    //speed += grav;
+    speed += grav;
   }
   if (speed <= 0) {
     goUp = false;
@@ -330,27 +290,27 @@ void drawLogo() {
   image(logo, 300, 150);
 }
 
-public class pipe {
-
-  void drawPipe1() {
-
-    fill(0, 255, 0);
-    rect(pipeX, -10, 60, n);
-    rect(pipeX - 20, n - 25, 100, 35);
-    rect(pipeX, n + 200, 60, height);
-    rect(pipeX - 20, n + 185, 100, 35);
-
-    pipeX -= 2;
-  }
-
-  void drawPipe2() {
-    fill(0, 255, 0);
-    rect(pipeX2, -10, 60, u);
-    rect(pipeX2 - 20, u - 25, 100, 35);
-    rect(pipeX2, u + 200, 60, height);
-    rect(pipeX2 - 20, u + 185, 100, 35);
-
-    pipeX2 -= 2;
-  }
-}
+//public class pipe {
+//
+//  void drawPipe1() {
+//
+//    fill(0, 255, 0);
+//    rect(pipeX, -10, 60, n);
+//    rect(pipeX - 20, n - 25, 100, 35);
+//    rect(pipeX, n + 200, 60, height);
+//    rect(pipeX - 20, n + 185, 100, 35);
+//
+//    pipeX -= 2;
+//  }
+//
+//  void drawPipe2() {
+//    fill(0, 255, 0);
+//    rect(pipeX2, -10, 60, u);
+//    rect(pipeX2 - 20, u - 25, 100, 35);
+//    rect(pipeX2, u + 200, 60, height);
+//    rect(pipeX2 - 20, u + 185, 100, 35);
+//
+//    pipeX2 -= 2;
+//  }
+//}
 
