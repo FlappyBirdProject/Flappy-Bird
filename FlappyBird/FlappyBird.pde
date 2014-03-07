@@ -12,18 +12,19 @@ boolean mainMenu; //Checks if main menu is active
 boolean play; //Checks if game is playing
 boolean scoreMenu; //Checks if score menu is active
 boolean gameOver; //Checks if player loses
-boolean randPipe; //Checks if new random values for pipes should be generated
 boolean goUp; //Checks if player wants to "flap" (move up)
 boolean draw; //Checks if pipes should be drawn/redrawn
 boolean time = true; //Along with the millis() function, this boolean determines at which times to generate/draw pipes
 boolean game = true; //If player hits pipe, game will be false and cause the player to fall and lose
+boolean randPipe;
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
 float grav = 0.2; //"Force" applied downward on Tom's face ingame to simulate gravity
-float i; //First random float (for first pipe drawn in drawPipe)
-float j; //Second random float (for second pipe drawn in drawPipe)
+//float i; //First random float (for first pipe drawn in drawPipe)
+//float j; //Second random float (for second pipe drawn in drawPipe)
+float x;
 
 int pipeSpd = 2; //Number of pixels to move pipes by every frame
 int tomY; //Y coordinate of Tom's face ingame
@@ -35,6 +36,13 @@ int xRight; //Right of Tom ... All of these coords are used to check if Tom hits
 int z; //Used in for statements to check the number of rows in the table (CSV) file to print onto score screen
 int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
 int pipeX = 615; //Initial x coordinate of first pipe
+int pipeX2 = 615; //Initial x coordinate of second pipe
+int zwag;
+int m;
+int n;
+int u;
+int ord;
+int wait;
 
 String in = "";
 String out = "";
@@ -67,6 +75,10 @@ void setup() {
   mainMenu = true;
   tomY = 2*height/5;
   table = loadTable("scores.csv", "header");
+  for (zwag = 0; zwag < 200; zwag++) {
+    pipes.append(zwag);
+    pipes.set(zwag, (int)random(100, 300));
+  }
 }
 
 void draw() {
@@ -116,23 +128,23 @@ void playGame() {
   //make first pipe appear here
   if (millis() >= waitStart && time) {
     randPipe = true;
-    draw = true;
+    //draw = true;
     time = false;
   }
   if (randPipe) {
-    i = random(75, 300);
-    j = random(75, 300);
+    n = pipes.get(ord);
+    u = pipes.get(ord + 1);
+    ord += 2;
     randPipe = false;
-    println(i);
-    println(j);
   }
-  if (draw) {
-    pipe.drawPipe(i, j); 
-    if (pipeX <= -810) {
-      pipeX = 615;
-      time = true;
-    }
-  }
+   if (millis() - wait >= waitStart) {
+   pipe.drawPipe1();
+   wait = 4000;
+   }
+   if (millis() - wait + 3000 >= waitStart) {
+   pipe.drawPipe2();
+   wait = 4000;
+   }
   if (goUp && game) {
     speed -= grav;
   }
@@ -320,22 +332,25 @@ void drawLogo() {
 
 public class pipe {
 
-  void drawPipe(float i, float j) {
-    checkFlappy();
+  void drawPipe1() {
 
     fill(0, 255, 0);
-    rect(pipeX, - 1, 60, i);
-    rect(pipeX - 20, i - 25, 100, 35);
-    rect(pipeX, i + 200, 60, height);
-    rect(pipeX - 20, i + 185, 100, 35);
-
-    fill(0, 255, 0);
-    rect(pipeX + 710, - 1, 60, j);
-    rect(pipeX + 690, j - 25, 100, 35);
-    rect(pipeX + 710, j + 200, 60, height);
-    rect(pipeX + 690, j + 185, 100, 35);
+    rect(pipeX, -10, 60, n);
+    rect(pipeX - 20, n - 25, 100, 35);
+    rect(pipeX, n + 200, 60, height);
+    rect(pipeX - 20, n + 185, 100, 35);
 
     pipeX -= 2;
+  }
+
+  void drawPipe2() {
+    fill(0, 255, 0);
+    rect(pipeX2, -10, 60, u);
+    rect(pipeX2 - 20, u - 25, 100, 35);
+    rect(pipeX2, u + 200, 60, height);
+    rect(pipeX2 - 20, u + 185, 100, 35);
+
+    pipeX2 -= 2;
   }
 }
 
