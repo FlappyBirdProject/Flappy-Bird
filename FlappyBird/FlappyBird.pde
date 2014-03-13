@@ -19,11 +19,12 @@ boolean game = true; //If player hits pipe, game will be false and cause the pla
 boolean randPipe;
 boolean draw1;
 boolean draw2;
+boolean drawThePipes;
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
-float grav = 0.2; //"Force" applied downward on Tom's face ingame to simulate gravity
+float grav = 0.3; //"Force" applied downward on Tom's face ingame to simulate gravity
 //float i; //First random float (for first pipe drawn in drawPipe)
 //float j; //Second random float (for second pipe drawn in drawPipe)
 float x;
@@ -37,11 +38,16 @@ int yBot; //Bot of Tom
 int xRight; //Right of Tom ... All of these coords are used to check if Tom hits a pipe or the ground
 int z; //Used in for statements to check the number of rows in the table (CSV) file to print onto score screen
 int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
+int pipeX;
+int i;
+int mil;
 
 String in = "";
 String out = "";
 
 Table table;
+
+pipe pipe = new pipe();
 
 void setup() {
   imageMode(CENTER);
@@ -98,12 +104,31 @@ void drawMainMenu() {
 }
 
 void playGame() {
+  mil = millis();
   score = 0;
   out = "";
   in = "";
   textFont(flap20);
   checkFlappy();
   image(tomceji, width/2, tomY);
+  
+  if (time) {
+    randPipe = true;
+    drawThePipes = true;
+    time = false;
+  }
+  
+  if (randPipe) {
+    i = (int)random(50, 400);
+    pipeX = width + 5;
+    randPipe = false;
+  }
+  
+  if (drawThePipes) {
+    pipe.drawPipe(i);
+    if (pipeX <= -105)
+    time = true;
+  }
 
   if (goUp && game) {
     speed -= grav;
@@ -116,7 +141,7 @@ void playGame() {
   }
   tomY += speed;
   //checks if he hits ground ... will add check for him hitting pipes once pipes are added!
-  if (tomY >= 458 || yTop <= 37) {
+  if (tomY >= 458) {
     gameOver = true;
     play = false;
   }
@@ -263,6 +288,8 @@ void drawPlayButton() {
   else {
     image(playButtonHighlight, 215, 350);
     if (mousePressed) {
+      pipeX = width + 5;
+      randPipe = true;
       play = true;
       mainMenu = false;
       gameOver = false;
@@ -290,27 +317,17 @@ void drawLogo() {
   image(logo, 300, 150);
 }
 
-//public class pipe {
-//
-//  void drawPipe1() {
-//
-//    fill(0, 255, 0);
-//    rect(pipeX, -10, 60, n);
-//    rect(pipeX - 20, n - 25, 100, 35);
-//    rect(pipeX, n + 200, 60, height);
-//    rect(pipeX - 20, n + 185, 100, 35);
-//
-//    pipeX -= 2;
-//  }
-//
-//  void drawPipe2() {
-//    fill(0, 255, 0);
-//    rect(pipeX2, -10, 60, u);
-//    rect(pipeX2 - 20, u - 25, 100, 35);
-//    rect(pipeX2, u + 200, 60, height);
-//    rect(pipeX2 - 20, u + 185, 100, 35);
-//
-//    pipeX2 -= 2;
-//  }
-//}
+public class pipe {
+
+  void drawPipe(int i) {
+
+    fill(0, 255, 0);
+    rect(pipeX, -10, 60, i);
+    rect(pipeX - 20, i - 25, 100, 35);
+    rect(pipeX, i + 200, 60, height);
+    rect(pipeX - 20, i + 185, 100, 35);
+
+    pipeX -= 2;
+  }
+}
 
