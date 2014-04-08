@@ -16,7 +16,6 @@ boolean play; //Checks if game is playing
 boolean scoreMenu; //Checks if score menu is active
 boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
-boolean draw; //Checks if pipes should be drawn/redrawn 
 boolean game = true; //If player hits pipe, game will be false and cause the player to fall and lose
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
@@ -67,18 +66,15 @@ void draw() {
   if (play) {
     playGame();
   }
+  if (scoreMenu) {
+    drawScoreMenu();
+  }
   backgroundFlappy();
   if (mainMenu) {
     drawMainMenu();
   }
-  else if (scoreMenu) {
-    drawScoreMenu();
-  }
-  else if (gameOver) {
+  if (gameOver) {
     gameOverMenu();
-  }
-  else if (scoreMenu == false) {
-    y = 185;
   }
 }
 
@@ -150,21 +146,6 @@ void drawScoreMenu() {
   text("SCORE", 500, 150);
   textAlign(LEFT);
   text("PLAYER", 100, 150);
-  textAlign(RIGHT);
-  fill(122, 126, 4);
-  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
-  textAlign(LEFT);
-  text("main menu", 5, 595);
-  if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
-    fill(0, 0, 255);
-    text("main menu", 5, 595);
-    if (mousePressed) {
-      mainMenu = true;
-      play = false;
-      scoreMenu = false;
-      gameOver = false;
-    }
-  }
   if (keyPressed && key == CODED) {
     if (keyCode == UP) {
       y -= 2;
@@ -248,6 +229,7 @@ void backgroundFlappy() {
         pipeXs.clear();
         pipes.clear();
         waitTime = millis() + 5000;
+        y = 185;
         mainMenu = true;
         play = false;
         scoreMenu = false;
