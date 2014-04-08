@@ -16,8 +16,7 @@ boolean play; //Checks if game is playing
 boolean scoreMenu; //Checks if score menu is active
 boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
-boolean draw; //Checks if pipes should be drawn/redrawn
-boolean time = true; //Along with the millis() function, this boolean determines at which times to generate/draw pipes
+boolean draw; //Checks if pipes should be drawn/redrawn 
 boolean game = true; //If player hits pipe, game will be false and cause the player to fall and lose
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
@@ -61,23 +60,24 @@ void setup() {
 }
 
 void draw() {
+  background(111, 206, 255);
   yTop = tomY - 37;
   yBot = tomY + 37;
   xRight = 328;
+  if (play) {
+    playGame();
+  }
   backgroundFlappy();
   if (mainMenu) {
     drawMainMenu();
   }
-  if (play) {
-    playGame();
-  }
-  if (scoreMenu) {
+  else if (scoreMenu) {
     drawScoreMenu();
   }
-  if (gameOver) {
+  else if (gameOver) {
     gameOverMenu();
   }
-  if (scoreMenu == false) {
+  else if (scoreMenu == false) {
     y = 185;
   }
 }
@@ -106,9 +106,8 @@ void playGame() {
   image(tomceji, width/2, tomY);
   if (millis() - waitTime >= 0) {
     pipe.genPipe();
-    waitTime = millis() + 4000;
+    waitTime = millis() + 1750;
   }
-
   if (goUp && game) {
     speed -= grav;
   }
@@ -119,7 +118,6 @@ void playGame() {
     goUp = false;
   }
   tomY += speed;
-  //checks if he hits ground ... will add check for him hitting pipes once pipes are added!
   if (tomY >= 458) {
     gameOver = true;
     play = false;
@@ -154,7 +152,7 @@ void drawScoreMenu() {
   text("PLAYER", 100, 150);
   textAlign(RIGHT);
   fill(122, 126, 4);
-  text("Made by Eric Lindau and Fisher Darling", 79*width/80, 595);
+  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
   textAlign(LEFT);
   text("main menu", 5, 595);
   if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
@@ -233,15 +231,13 @@ void keyPressed() {
 void backgroundFlappy() {
   textFont(flap20);
   noStroke();
-  fill(111, 206, 255);
-  rect(-1, 0, 601, 495);
   strokeWeight(10);
   stroke(54, 188, 2);
   fill(234, 237, 165);
   rect(-11, 500, 621, 110);
   fill(122, 126, 4);
   textAlign(RIGHT);
-  text("Made by Eric Lindau and Fisher Darling", 79*width/80, 595);
+  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
   textAlign(LEFT);
   if (mainMenu == false) {
     text("main menu", 5, 595);
@@ -249,6 +245,9 @@ void backgroundFlappy() {
       fill(0, 0, 255);
       text("main menu", 5, 595);
       if (mousePressed) {
+        pipeXs.clear();
+        pipes.clear();
+        waitTime = millis() + 5000;
         mainMenu = true;
         play = false;
         scoreMenu = false;
@@ -303,13 +302,13 @@ public class pipe {
       rect(pipeXs.get(a), -10, 60, pipes.get(a));
       rect(pipeXs.get(a) - 20, pipes.get(a) - 25, 100, 35);
       rect(pipeXs.get(a), pipes.get(a) + 195, 60, height);
-      rect(pipeXs.get(a) - 20, pipes.get(a) + 165, 100, 35);
-      pipeXs.sub(a, 1);
+      rect(pipeXs.get(a) - 20, pipes.get(a) + 155, 100, 35);
+      pipeXs.sub(a, 3);
     }
   }
 
   void genPipe() {
-    pipes.append((int)random(100, 300));
+    pipes.append((int)random(50, 250));
     pipeXs.append(620);
   }
 }
