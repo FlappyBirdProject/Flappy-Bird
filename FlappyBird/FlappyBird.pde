@@ -1,3 +1,6 @@
+IntList pipeXs;
+IntList pipes;
+
 PImage tomceji; //Declare Tom's picture ... 56x74
 PImage logo; //Declare "Flappy Tom" logo
 PImage playButton; //Declare play button's image
@@ -16,31 +19,20 @@ boolean goUp; //Checks if player wants to "flap" (move up)
 boolean draw; //Checks if pipes should be drawn/redrawn
 boolean time = true; //Along with the millis() function, this boolean determines at which times to generate/draw pipes
 boolean game = true; //If player hits pipe, game will be false and cause the player to fall and lose
-boolean randPipe;
-boolean draw1;
-boolean draw2;
-boolean drawThePipes;
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
-float grav = 0.3; //"Force" applied downward on Tom's face ingame to simulate gravity
-//float i; //First random float (for first pipe drawn in drawPipe)
-//float j; //Second random float (for second pipe drawn in drawPipe)
-float x;
-
+float grav = 0.35; //"Force" applied downward on Tom's face ingame to simulate gravity
 int pipeSpd = 2; //Number of pixels to move pipes by every frame
 int tomY; //Y coordinate of Tom's face ingame
-int waitStart = 5000; //Time (in milliseconds) to wait for first pipe to draw
+int waitTime = 5000; //Time (in milliseconds) to wait for first pipe to draw
 int score; //Score held for player
 int yTop; //Top of Tom
 int yBot; //Bot of Tom
 int xRight; //Right of Tom ... All of these coords are used to check if Tom hits a pipe or the ground
 int z; //Used in for statements to check the number of rows in the table (CSV) file to print onto score screen
 int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
-int pipeX;
-int i;
-int mil;
 
 String in = "";
 String out = "";
@@ -64,6 +56,8 @@ void setup() {
   mainMenu = true;
   tomY = 2*height/5;
   table = loadTable("scores.csv", "header");
+  pipeXs = new IntList();
+  pipes = new IntList();
 }
 
 void draw() {
@@ -104,30 +98,15 @@ void drawMainMenu() {
 }
 
 void playGame() {
-  mil = millis();
-  score = 0;
   out = "";
   in = "";
   textFont(flap20);
   checkFlappy();
+  pipe.drawPipes();
   image(tomceji, width/2, tomY);
-  
-  if (time) {
-    randPipe = true;
-    drawThePipes = true;
-    time = false;
-  }
-  
-  if (randPipe) {
-    i = (int)random(50, 400);
-    pipeX = width + 5;
-    randPipe = false;
-  }
-  
-  if (drawThePipes) {
-    pipe.drawPipe(i);
-    if (pipeX <= -105)
-    time = true;
+  if (millis() - waitTime >= 0) {
+    pipe.genPipe();
+    waitTime = millis() + 4000;
   }
 
   if (goUp && game) {
@@ -175,7 +154,7 @@ void drawScoreMenu() {
   text("PLAYER", 100, 150);
   textAlign(RIGHT);
   fill(122, 126, 4);
-  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
+  text("Made by Eric Lindau and Fisher Darling", 79*width/80, 595);
   textAlign(LEFT);
   text("main menu", 5, 595);
   if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
@@ -262,7 +241,7 @@ void backgroundFlappy() {
   rect(-11, 500, 621, 110);
   fill(122, 126, 4);
   textAlign(RIGHT);
-  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
+  text("Made by Eric Lindau and Fisher Darling", 79*width/80, 595);
   textAlign(LEFT);
   if (mainMenu == false) {
     text("main menu", 5, 595);
@@ -288,8 +267,7 @@ void drawPlayButton() {
   else {
     image(playButtonHighlight, 215, 350);
     if (mousePressed) {
-      pipeX = width + 5;
-      randPipe = true;
+      score = 0;
       play = true;
       mainMenu = false;
       gameOver = false;
@@ -319,15 +297,20 @@ void drawLogo() {
 
 public class pipe {
 
-  void drawPipe(int i) {
+  void drawPipes() {
+    for (int a = 0; a < pipes.size(); a++) {
+      fill(0, 255, 0);
+      rect(pipeXs.get(a), -10, 60, pipes.get(a));
+      rect(pipeXs.get(a) - 20, pipes.get(a) - 25, 100, 35);
+      rect(pipeXs.get(a), pipes.get(a) + 195, 60, height);
+      rect(pipeXs.get(a) - 20, pipes.get(a) + 165, 100, 35);
+      pipeXs.sub(a, 1);
+    }
+  }
 
-    fill(0, 255, 0);
-    rect(pipeX, -10, 60, i);
-    rect(pipeX - 20, i - 25, 100, 35);
-    rect(pipeX, i + 200, 60, height);
-    rect(pipeX - 20, i + 185, 100, 35);
-
-    pipeX -= 2;
+  void genPipe() {
+    pipes.append((int)random(100, 300));
+    pipeXs.append(620);
   }
 }
 
