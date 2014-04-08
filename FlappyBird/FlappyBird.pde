@@ -1,7 +1,7 @@
 IntList pipeXs;
 IntList pipes;
 
-PImage tomceji; //Declare Tom's picture ... 56x74
+PImage tomceji; //Declare Tom's picture ... 56x74 (54x72)
 PImage logo; //Declare "Flappy Tom" logo
 PImage playButton; //Declare play button's image
 PImage scoresButton; //Declare score button's image
@@ -42,7 +42,7 @@ pipe pipe = new pipe();
 void setup() {
   imageMode(CENTER);
   size(600, 600);
-  tomceji = loadImage("tomceji.jpg");
+  tomceji = loadImage("tomceji.png");
   logo = loadImage("logo.png");
   playButton = loadImage("playButton.png"); 
   scoresButton = loadImage("scoresButton.png");
@@ -114,10 +114,7 @@ void playGame() {
     goUp = false;
   }
   tomY += speed;
-  if (tomY >= 458) {
-    gameOver = true;
-    play = false;
-  }
+  checkFlappy();
 }
 
 void drawScoreMenu() {
@@ -270,6 +267,10 @@ void drawScoresButton() {
 }
 
 void checkFlappy() {
+  if (tomY + 27 >= 491) {
+    gameOver = true;
+    play = false;
+  }
 }
 
 void drawLogo() {
