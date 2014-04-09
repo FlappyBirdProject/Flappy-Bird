@@ -276,9 +276,18 @@ void checkFlappy() {
     gameOver = true;
     play = false;
   }
-  //for(int a = 0; a < pipes.size(); a++) {
-    //if(tomY - 27 >= pipes.get(a) - 25 && tomY <= pipes.get(a) + 10 
-  //}
+  for (int a = 0; a < pipes.size(); a++) {
+    if (yTop <= pipes.get(a) && pipeXs.get(a) <= 328 && pipeXs.get(a) + 60 >= 328) {
+      pipeXs.clear();
+      pipes.clear();
+      waitTime = millis() + 5000;
+      gameOver = true;
+      play = false;
+    }   
+    if (tomY - 27 >= pipes.get(a) - 25 && tomY <= pipes.get(a) + 10 && pipeXs.get(a) >= width/2) {
+      score++;
+    }
+  }
 }
 
 void drawLogo() {
