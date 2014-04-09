@@ -1,3 +1,9 @@
+//****************************//
+//         Flappy Tom!        //
+//      by Eric Lindau and    //
+//        Fisher Darling      //
+//****************************//
+
 IntList pipeXs;
 IntList pipes;
 
@@ -16,7 +22,6 @@ boolean play; //Checks if game is playing
 boolean scoreMenu; //Checks if score menu is active
 boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
-boolean game = true; //If player hits pipe, game will be false and cause the player to fall and lose
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
@@ -24,7 +29,7 @@ float speed; //Speed of Tom's face ingame
 float grav = 0.35; //"Force" applied downward on Tom's face ingame to simulate gravity
 int pipeSpd = 2; //Number of pixels to move pipes by every frame
 int tomY; //Y coordinate of Tom's face ingame
-int waitTime = 5000; //Time (in milliseconds) to wait for first pipe to draw
+int waitTime = 5000; //For timer
 int score; //Score held for player
 int yTop; //Top of Tom
 int yBot; //Bot of Tom
@@ -104,7 +109,7 @@ void playGame() {
     pipe.genPipe();
     waitTime = millis() + 1750;
   }
-  if (goUp && game) {
+  if (goUp) {
     speed -= grav;
   }
   else {
@@ -271,6 +276,9 @@ void checkFlappy() {
     gameOver = true;
     play = false;
   }
+  //for(int a = 0; a < pipes.size(); a++) {
+    //if(tomY - 27 >= pipes.get(a) - 25 && tomY <= pipes.get(a) + 10 
+  //}
 }
 
 void drawLogo() {
