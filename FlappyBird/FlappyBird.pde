@@ -29,11 +29,10 @@ float speed; //Speed of Tom's face ingame
 float grav = 0.35; //"Force" applied downward on Tom's face ingame to simulate gravity
 int pipeSpd = 2; //Number of pixels to move pipes by every frame
 int tomY; //Y coordinate of Tom's face ingame
-int waitTime = 5000; //For timer
+int waitTime; //For timer
 int score; //Score held for player
 int yTop; //Top of Tom
 int yBot; //Bot of Tom
-int xRight; //Right of Tom ... All of these coords are used to check if Tom hits a pipe or the ground
 int z; //Used in for statements to check the number of rows in the table (CSV) file to print onto score screen
 int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
 
@@ -65,9 +64,8 @@ void setup() {
 
 void draw() {
   background(111, 206, 255);
-  yTop = tomY - 37;
-  yBot = tomY + 37;
-  xRight = 328;
+  yTop = tomY - 36;
+  yBot = tomY + 36;
   if (play) {
     playGame();
   }
@@ -228,9 +226,6 @@ void backgroundFlappy() {
       fill(0, 0, 255);
       text("main menu", 5, 595);
       if (mousePressed) {
-        pipeXs.clear();
-        pipes.clear();
-        waitTime = millis() + 5000;
         y = 185;
         mainMenu = true;
         play = false;
@@ -251,6 +246,9 @@ void drawPlayButton() {
     image(playButtonHighlight, 215, 350);
     if (mousePressed) {
       score = 0;
+      waitTime = millis() + 3000;
+      pipeXs.clear();
+      pipes.clear();
       play = true;
       mainMenu = false;
       gameOver = false;
@@ -277,14 +275,11 @@ void checkFlappy() {
     play = false;
   }
   for (int a = 0; a < pipes.size(); a++) {
-    if (yTop <= pipes.get(a) && pipeXs.get(a) <= 328 && pipeXs.get(a) + 60 >= 328) {
-      pipeXs.clear();
-      pipes.clear();
-      waitTime = millis() + 5000;
+    if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 29 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328) {
       gameOver = true;
       play = false;
     }   
-    if (tomY - 27 >= pipes.get(a) - 25 && tomY <= pipes.get(a) + 10 && pipeXs.get(a) >= width/2) {
+    if (yTop >= pipes.get(a) - 25 && tomY <= pipes.get(a) + 10 && pipeXs.get(a) >= width/2) {
       score++;
     }
   }
@@ -300,8 +295,9 @@ public class pipe {
     for (int a = 0; a < pipes.size(); a++) {
       fill(0, 255, 0);
       rect(pipeXs.get(a), -10, 60, pipes.get(a));
-      rect(pipeXs.get(a) - 20, pipes.get(a) - 25, 100, 35);
-      rect(pipeXs.get(a), pipes.get(a) + 195, 60, height);
+      rect(pipeXs.get(a) - 20, pipes.get(a) - 10, 100, 35);
+      
+      rect(pipeXs.get(a), pipes.get(a) + 190, 60, height);
       rect(pipeXs.get(a) - 20, pipes.get(a) + 155, 100, 35);
       pipeXs.sub(a, 3);
     }
