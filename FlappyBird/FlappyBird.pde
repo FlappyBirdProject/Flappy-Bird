@@ -281,7 +281,7 @@ void checkFlappy() {
       play = false;
     }   
 //    else if (yBot >= pipes.get(a) - 20)
-    else if (pipeXs.get(a) <= 328) {
+    else if (pipeXs.get(a) == 332) {
       score++;
     }
   }
