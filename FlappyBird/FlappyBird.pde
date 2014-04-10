@@ -275,11 +275,13 @@ void checkFlappy() {
     play = false;
   }
   for (int a = 0; a < pipes.size(); a++) {
+    //(yTop >= pipes.get(a) - 25 && tomY <= pipes.get(a) + 10 && pipeXs.get(a) >= width/2)
     if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 29 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328) {
       gameOver = true;
       play = false;
     }   
-    if (yTop >= pipes.get(a) - 25 && tomY <= pipes.get(a) + 10 && pipeXs.get(a) >= width/2) {
+//    else if (yBot >= pipes.get(a) - 20)
+    else if (pipeXs.get(a) <= 328) {
       score++;
     }
   }
