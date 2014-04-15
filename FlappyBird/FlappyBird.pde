@@ -290,7 +290,7 @@ void drawLogo() {
   image(logo, 300, 150);
 }
 
-public class pipe {
+class pipe {
 
   void drawPipes() {
     for (int a = 0; a < pipes.size(); a++) {
