@@ -26,7 +26,7 @@ boolean goUp; //Checks if player wants to "flap" (move up)
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
-float grav = 0.36; //"Force" applied downward on Tom's face ingame to simulate gravity
+float grav = 0.38; //"Force" applied downward on Tom's face ingame to simulate gravity
 int pipeSpd = 2; //Number of pixels to move pipes by every frame
 int tomY; //Y coordinate of Tom's face ingame
 int waitTime; //For timer
@@ -118,6 +118,9 @@ void playGame() {
   }
   tomY += speed;
   checkFlappy();
+  textFont(flap48);
+  fill(255);
+  text(score, width/2, 1*width/4);
 }
 
 void drawScoreMenu() {
@@ -270,27 +273,25 @@ void drawScoresButton() {
 }
 
 void checkFlappy() {
+  //floor hitbox
   if (tomY + 27 >= 491) {
     gameOver = true;
     play = false;
   }
   for (int a = 0; a < pipes.size(); a++) {
-    if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 29 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328) {
+    //top pipe hitbox
+    if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 29 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
       gameOver = true;
       play = false;
     }
-    else if (yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+    //bottom pipe hitbox
+    else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
       gameOver = true;
       play = false;
     }
-    else if (yBot >= pipes.get(a) + 150 && yTop <= pipes.get(a) + 195 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328) {
-      gameOver = true;
-      play = false;
-    }
-    //    if ((yTop >= pipes.get(a) - 25 || yBot <= pipes.get(a) + 10) && pipeXs.get(a) <= 327 ) {
-    //      gameOver = true;
-    //      play = false;
-    //    }
+    //between pipes hitbox
+    else if (yTop >= pipes.get(a) + 29 && yBot <= pipes.get(a) + 170 && pipeXs.get(a) == 335)
+      score++;
   }
 }
 
@@ -306,8 +307,8 @@ class pipe {
       rect(pipeXs.get(a), -10, 60, pipes.get(a));
       rect(pipeXs.get(a) - 20, pipes.get(a) - 10, 100, 35);
 
-      rect(pipeXs.get(a), pipes.get(a) + 190, 60, height);
-      rect(pipeXs.get(a) - 20, pipes.get(a) + 155, 100, 35);
+      rect(pipeXs.get(a), pipes.get(a) + 210, 60, height);
+      rect(pipeXs.get(a) - 20, pipes.get(a) + 175, 100, 35);
       pipeXs.sub(a, 3);
     }
   }
