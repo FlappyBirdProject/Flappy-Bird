@@ -26,7 +26,7 @@ boolean goUp; //Checks if player wants to "flap" (move up)
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
-float grav = 0.35; //"Force" applied downward on Tom's face ingame to simulate gravity
+float grav = 0.36; //"Force" applied downward on Tom's face ingame to simulate gravity
 int pipeSpd = 2; //Number of pixels to move pipes by every frame
 int tomY; //Y coordinate of Tom's face ingame
 int waitTime; //For timer
@@ -278,7 +278,15 @@ void checkFlappy() {
     if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 29 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328) {
       gameOver = true;
       play = false;
-    }   
+    }
+    else if (yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+      gameOver = true;
+      play = false;
+    }
+    else if (yBot >= pipes.get(a) + 150 && yTop <= pipes.get(a) + 195 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328) {
+      gameOver = true;
+      play = false;
+    }
     //    if ((yTop >= pipes.get(a) - 25 || yBot <= pipes.get(a) + 10) && pipeXs.get(a) <= 327 ) {
     //      gameOver = true;
     //      play = false;
@@ -296,10 +304,10 @@ class pipe {
     for (int a = 0; a < pipes.size(); a++) {
       fill(0, 255, 0);
       rect(pipeXs.get(a), -10, 60, pipes.get(a));
-      rect(pipeXs.get(a) - 20, pipes.get(a) - 10, 100, 35          );
+      rect(pipeXs.get(a) - 20, pipes.get(a) - 10, 100, 35);
 
-      rect(pipeXs.get(a), pipes.get(a) + 190, 60, height     );
-      rect(pipeXs.get(a) - 20, pipes.get(a) + 155, 100, 35         );
+      rect(pipeXs.get(a), pipes.get(a) + 190, 60, height);
+      rect(pipeXs.get(a) - 20, pipes.get(a) + 155, 100, 35);
       pipeXs.sub(a, 3);
     }
   }
