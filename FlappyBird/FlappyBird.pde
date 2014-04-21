@@ -290,7 +290,7 @@ void checkFlappy() {
       play = false;
     }
     //between pipes hitbox
-    else if (yTop >= pipes.get(a) + 29 && yBot <= pipes.get(a) + 170 && pipeXs.get(a) == 335)
+    else if (pipeXs.get(a) == 329)
       score++;
   }
 }
@@ -300,7 +300,6 @@ void drawLogo() {
 }
 
 class pipe {
-
   void drawPipes() {
     for (int a = 0; a < pipes.size(); a++) {
       fill(0, 255, 0);
@@ -318,4 +317,3 @@ class pipe {
     pipeXs.append(620);
   }
 }
-
