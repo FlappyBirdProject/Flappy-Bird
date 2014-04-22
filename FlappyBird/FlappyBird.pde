@@ -64,6 +64,8 @@ void setup() {
 
 void draw() {
   background(111, 206, 255);
+  if(score >= 1000)
+  background(random(256), random(256), random(256));
   yTop = tomY - 36;
   yBot = tomY + 36;
   if (play) {
@@ -166,18 +168,8 @@ void gameOverMenu() {
   textAlign(CENTER);
   fill(255);
   text("YOU LOST WITH A SCORE OF:\n" + score/2, 300, 150);
-  text("Click anywhere to continue without saving score", 300, 250);
   text("Type your name:", 300, 350);
   text(in + "\nPress the return key when you are done...", 300, 375);
-}
-
-void mousePressed() {
-  if (gameOver) {
-    gameOver = false;
-    mainMenu = true;
-    tomY = 2*height/5;
-    speed = 0;
-  }
 }
 
 
@@ -255,6 +247,8 @@ void drawPlayButton() {
       play = true;
       mainMenu = false;
       gameOver = false;
+      tomY = 2*height/5;
+      speed = 0;
     }
   }
 }
@@ -285,7 +279,7 @@ void checkFlappy() {
       play = false;
     }
     //bottom pipe hitbox
-    else if (yBot >= pipes.get(a) + 172 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+    else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
       gameOver = true;
       play = false;
     }
