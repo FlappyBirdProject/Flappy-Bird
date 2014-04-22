@@ -4,17 +4,17 @@
 //        Fisher Darling      //
 //****************************//
 
-IntList pipeXs;
-IntList pipes;
+IntList pipeXs; //List of the x coordinates for pipes
+IntList pipes; //List of randomly generated numbers used to create randomly sized pipes
 
-PImage tomceji; //Declare Tom's picture ... 56x74 (54x72)
-PImage logo; //Declare "Flappy Tom" logo
-PImage playButton; //Declare play button's image
-PImage scoresButton; //Declare score button's image
-PImage playButtonHighlight; //Declare the image of the play button when highlighted
-PImage scoresButtonHighlight; //Declare the image of the score button when highlighted
+PImage tomceji; //Tom's picture ... 56x74 (54x72 without considering useless pixels)
+PImage logo; //"Flappy Tom" logo
+PImage playButton; //Play button's image
+PImage scoresButton; //Score button's image
+PImage playButtonHighlight; //Image of the play button when hovered over
+PImage scoresButtonHighlight; //Image of the score button when hovered over
 
-PFont flap20; //The beautiful 20 size font
+PFont flap20; //The beautiful size 20 font
 PFont flap48; //size 48
 
 boolean mainMenu; //Checks if main menu is active
@@ -27,54 +27,53 @@ float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
 float grav = 0.39; //"Force" applied downward on Tom's face ingame to simulate gravity
-int pipeSpd = 2; //Number of pixels to move pipes by every frame
+
 int tomY; //Y coordinate of Tom's face ingame
-int waitTime; //For timer
+int waitTime; //Used with a timer (using millis()) used to generate a new pipe for a certain number of seconds
 int score; //Score held for player
 int yTop; //Top of Tom
 int yBot; //Bot of Tom
-int z; //Used in for statements to check the number of rows in the table (CSV) file to print onto score screen
 int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
 
-String in = "";
-String out = "";
+String in = ""; //In the score screen, this String is used to display the current name to be saved with the current score
+String out = ""; //Once enter is pressed, out is saved as in's last entry and saved in a CSV file along with the score
 
-Table table;
+Table table; //The table of scores and names
 
-pipe pipe = new pipe();
+pipe pipe = new pipe(); //Welcome to Java
 
 void setup() {
   imageMode(CENTER);
   size(600, 600);
-  tomceji = loadImage("tomceji.png");
-  logo = loadImage("logo.png");
-  playButton = loadImage("playButton.png"); 
-  scoresButton = loadImage("scoresButton.png");
-  playButtonHighlight = loadImage("playButtonHighlight.png");
-  scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
-  flap20 = loadFont("04b19-20.vlw");
-  flap48 = loadFont("04b19-48.vlw");
+  tomceji = loadImage("tomceji.png"); //Tom's cropped picture
+  logo = loadImage("logo.png"); //"Flappy Tom" on the main menu
+  playButton = loadImage("playButton.png"); //Image for the play button on main menu
+  scoresButton = loadImage("scoresButton.png"); //Image for the score button on main menu
+  playButtonHighlight = loadImage("playButtonHighlight.png"); //Image for play button on main menu when hovered over
+  scoresButtonHighlight = loadImage("scoresButtonHighlight.png"); //Image for scores button on main menu when hovered over
+  flap20 = loadFont("04b19-20.vlw"); //Load size 20 font
+  flap48 = loadFont("04b19-48.vlw"); //Load size 48 font
   backgroundFlappy();
-  mainMenu = true;
-  tomY = 2*height/5;
-  table = loadTable("scores.csv", "header");
-  pipeXs = new IntList();
-  pipes = new IntList();
+  mainMenu = true; //Sends player to main menu by default
+  tomY = 2*height/5; //Sets Tom's position to a near-center position initially
+  table = loadTable("scores.csv", "header"); //Loads the score/name table
+  pipeXs = new IntList(); //Spooky Scary
+  pipes = new IntList(); //Skeletons
 }
 
 void draw() {
-  background(111, 206, 255);
-  if(score >= 1000)
+  background(111, 206, 255); //Dat Flappy Blue
+  if(score >= 1000) //If you (for some reason) have a score of 1000+, you get a groovy background
   background(random(256), random(256), random(256));
-  yTop = tomY - 36;
-  yBot = tomY + 36;
+  yTop = tomY - 36; //Always sets Tom's top pos relative to his y coordinate
+  yBot = tomY + 36; //Always sets Tom's bot pos relative to his y coordinate
   if (play) {
     playGame();
   }
   if (scoreMenu) {
     drawScoreMenu();
   }
-  backgroundFlappy();
+  backgroundFlappy(); //This is drawn after the score menu so that the text goes under the ground if it is moved so
   if (mainMenu) {
     drawMainMenu();
   }
@@ -88,58 +87,52 @@ void drawMainMenu() {
   drawPlayButton();
   drawScoresButton();
   drawLogo();
-  image(tomceji, width / 2, logoY);
-  logoY += speedOfLogo;
-  if (logoY > 265) {
-    speedOfLogo *= -1;
-  }
-  if (logoY < 235) {
-    speedOfLogo *= -1;
-  }
+  image(tomceji, width/2, logoY); //Tom's swaggin' face
+  logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
+  if (logoY > 265) {    //
+    speedOfLogo *= -1;  //
+  }                     //
+  if (logoY < 235) {    //
+    speedOfLogo *= -1;  //
+  }                     //
 }
 
 void playGame() {
-  out = "";
-  in = "";
   textFont(flap20);
   checkFlappy();
   pipe.drawPipes();
-  image(tomceji, width/2, tomY);
-  if (millis() - waitTime >= 0) {
-    pipe.genPipe();
-    waitTime = millis() + 1750;
-  }
-  if (goUp) {
-    speed -= grav;
-  }
-  else {
-    speed += grav;
-  }
-  if (speed <= 0) {
-    goUp = false;
-  }
+  image(tomceji, width/2, tomY); //Tom's swaggin' face
+  if (millis() - waitTime >= 0) { //Timer - After 3 seconds, a pipe is generated every 1.75 second (the 3 seconds are determined when the mouse clicks the main menu's play button)
+    pipe.genPipe();               //
+    waitTime = millis() + 1750;   //
+  }                               //
+  if (goUp) {      //Lets Tom fly when space bar is pressed
+    speed -= grav; //Yup
+  }                //
+  else {           //
+    speed += grav; //Yup
+  }                //
+  if (speed <= 0) {//Makes Tom not "go up" if he has no more upward velocity
+    goUp = false;  //
+  }                //
   tomY += speed;
   checkFlappy();
   textFont(flap48);
   fill(255);
-  text(score/2, width/2, 1*width/4);
+  text(score/2, width/2, 1*width/4); //Score/2 because the for loop checking if Tom makes it runs twice, adding 2 points for each pipe (2fast2furious)
 }
 
 void drawScoreMenu() {
   fill(255);
-  for (z = 0; z < table.getRowCount(); z++) {
-    textAlign(RIGHT);
-    text(table.getInt(z, 1), 500, y + z * 35);
-    textAlign(LEFT);
-    text(table.getString(z, 0), 100, y + z * 35);
-  }
+  for (int z = 0; z < table.getRowCount(); z++) { //Gets data from table of scores and names and prints them on screen on separate rows
+    textAlign(RIGHT);                             //Score
+    text(table.getInt(z, 1), 500, y + z * 35);    //z*35 works because of the size of the font
+    textAlign(LEFT);                              //Player
+    text(table.getString(z, 0), 100, y + z * 35); //
+  }                                               //
   fill(111, 206, 255);
   noStroke();
-  rect(0, 0, 600, 160);
-  strokeWeight(10);
-  stroke(54, 188, 2);
-  fill(234, 237, 165);
-  rect(-11, 500, 621, 110);
+  rect(0, 0, 600, 160); //This rectangle covers the text if it moves above a high point (aesthetics yeh)
   fill(255);
   textAlign(CENTER);
   textFont(flap20);
@@ -151,14 +144,14 @@ void drawScoreMenu() {
   text("SCORE", 500, 150);
   textAlign(LEFT);
   text("PLAYER", 100, 150);
-  if (keyPressed && key == CODED) {
-    if (keyCode == UP) {
-      y -= 2;
-    }
-    if (keyCode == DOWN) {
-      y += 2;
-    }
-  }
+  if (keyPressed && key == CODED) { //Allows user to navigate scores (scroll thru them)
+    if (keyCode == UP) {            //
+      y -= 2;                       //
+    }                               //
+    if (keyCode == DOWN) {          //
+      y += 2;                       //
+    }                               //
+  }                                 //
 }
 
 void gameOverMenu() {
