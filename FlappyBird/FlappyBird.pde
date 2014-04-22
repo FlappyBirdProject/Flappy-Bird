@@ -26,7 +26,7 @@ boolean goUp; //Checks if player wants to "flap" (move up)
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
-float grav = 0.38; //"Force" applied downward on Tom's face ingame to simulate gravity
+float grav = 0.39; //"Force" applied downward on Tom's face ingame to simulate gravity
 int pipeSpd = 2; //Number of pixels to move pipes by every frame
 int tomY; //Y coordinate of Tom's face ingame
 int waitTime; //For timer
@@ -120,7 +120,7 @@ void playGame() {
   checkFlappy();
   textFont(flap48);
   fill(255);
-  text(score, width/2, 1*width/4);
+  text(score/2, width/2, 1*width/4);
 }
 
 void drawScoreMenu() {
@@ -165,7 +165,7 @@ void gameOverMenu() {
   }
   textAlign(CENTER);
   fill(255);
-  text("YOU LOST WITH A SCORE OF:\n" + score, 300, 150);
+  text("YOU LOST WITH A SCORE OF:\n" + score/2, 300, 150);
   text("Click anywhere to continue without saving score", 300, 250);
   text("Type your name:", 300, 350);
   text(in + "\nPress the return key when you are done...", 300, 375);
@@ -187,7 +187,7 @@ void keyPressed() {
       out = in;
       int rows = table.getRowCount();
       table.setString(rows, 0, out);
-      table.setInt(rows, 1, score);
+      table.setInt(rows, 1, score/2);
       saveTable(table, "data/scores.csv");
       mainMenu = true;
       gameOver = false;
@@ -280,12 +280,12 @@ void checkFlappy() {
   }
   for (int a = 0; a < pipes.size(); a++) {
     //top pipe hitbox
-    if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 29 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+    if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 27 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
       gameOver = true;
       play = false;
     }
     //bottom pipe hitbox
-    else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+    else if (yBot >= pipes.get(a) + 172 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
       gameOver = true;
       play = false;
     }
