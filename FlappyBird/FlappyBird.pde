@@ -63,8 +63,8 @@ void setup() {
 
 void draw() {
   background(111, 206, 255); //Dat Flappy Blue
-  if(score >= 1000) //If you (for some reason) have a score of 1000+, you get a groovy background
-  background(random(256), random(256), random(256));
+  if (score >= 1000) //If you (for some reason) have a score of 1000+, you get a groovy background
+    background(random(256), random(256), random(256));
   yTop = tomY - 36; //Always sets Tom's top pos relative to his y coordinate
   yBot = tomY + 36; //Always sets Tom's bot pos relative to his y coordinate
   if (play) {
@@ -211,7 +211,7 @@ void backgroundFlappy() {
   if (mainMenu == false) {
     text("main menu", 5, 595);
     if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
-      fill(0, 0, 255);
+      fill(54, 188, 2);
       text("main menu", 5, 595);
       if (mousePressed) {
         y = 185;
@@ -269,12 +269,12 @@ void checkFlappy() {
   }
   for (int a = 0; a < pipes.size(); a++) {
     //top pipe hitbox
-    if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 27 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+    if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 28 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
       gameOver = true;
       play = false;
     }
     //bottom pipe hitbox
-    else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 328 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+    else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
       gameOver = true;
       play = false;
     }
@@ -306,3 +306,4 @@ class pipe {
     pipeXs.append(620);
   }
 }
+
