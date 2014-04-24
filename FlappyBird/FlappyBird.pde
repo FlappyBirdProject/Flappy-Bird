@@ -169,11 +169,13 @@ void gameOverMenu() {
 void keyPressed() {
   if (gameOver) {
     if (key == '\n') {
-      out = in;
-      int rows = table.getRowCount();
-      table.setString(rows, 0, out);
-      table.setInt(rows, 1, score/2);
-      saveTable(table, "data/scores.csv");
+      if (in.length() >= 1) {
+        out = in;
+        int rows = table.getRowCount();
+        table.setString(rows, 0, out);
+        table.setInt(rows, 1, score/2);
+        saveTable(table, "data/scores.csv");
+      }
       mainMenu = true;
       gameOver = false;
     }
