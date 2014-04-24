@@ -242,6 +242,8 @@ void drawPlayButton() {
       gameOver = false;
       tomY = 2*height/5;
       speed = 0;
+      in="";
+      out="";
     }
   }
 }
