@@ -22,6 +22,7 @@ boolean play; //Checks if game is playing
 boolean scoreMenu; //Checks if score menu is active
 boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
+boolean pipeMove = true;
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
@@ -186,7 +187,7 @@ void keyPressed() {
       in = in.substring(0, in.length() - 1);
     }
   }
-  if (play) {
+  if (play && pipeMove) {
     if (key == ' ') {
       if (goUp) {
         goUp = false;
@@ -246,6 +247,8 @@ void drawPlayButton() {
       speed = 0;
       in="";
       out="";
+      pipeMove = true;
+      speed = 0;
     }
   }
 }
@@ -265,24 +268,34 @@ void drawScoresButton() {
 
 void checkFlappy() {
   //floor hitbox
-  if (tomY + 27 >= 491) {
+  if (tomY + 27 >= 491 && pipeMove) {
+    pipeMove = false;
+    goUp = true;
+    speed = -15;
+    tomY -= 5;
+  }
+  if (pipeMove) {
+    for (int a = 0; a < pipes.size(); a++) {
+      //top pipe hitbox
+      if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 28 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+        pipeMove = false;
+        goUp = true;
+        speed = -15;
+      }
+      //bottom pipe hitbox
+      else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
+        pipeMove = false;
+        goUp = true;
+        speed = -15;
+      }
+      //between pipes hitbox
+      else if (pipeXs.get(a) == 329)
+        score++;
+    }
+  }
+  if (tomY + 27 >= 491 && !pipeMove) {
     gameOver = true;
     play = false;
-  }
-  for (int a = 0; a < pipes.size(); a++) {
-    //top pipe hitbox
-    if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 28 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
-      gameOver = true;
-      play = false;
-    }
-    //bottom pipe hitbox
-    else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
-      gameOver = true;
-      play = false;
-    }
-    //between pipes hitbox
-    else if (pipeXs.get(a) == 329)
-      score++;
   }
 }
 
@@ -299,7 +312,8 @@ class pipe {
 
       rect(pipeXs.get(a), pipes.get(a) + 210, 60, height);
       rect(pipeXs.get(a) - 20, pipes.get(a) + 175, 100, 35);
-      pipeXs.sub(a, 3);
+      if (pipeMove)
+        pipeXs.sub(a, 3);
     }
   }
 
