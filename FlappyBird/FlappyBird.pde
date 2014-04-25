@@ -27,7 +27,7 @@ boolean pipeMove = true;
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
-float grav = 0.39; //"Force" applied downward on Tom's face ingame to simulate gravity
+float grav = 0.30; //"Force" applied downward on Tom's face ingame to simulate gravity
 
 int tomY; //Y coordinate of Tom's face ingame
 int waitTime; //Used with a timer (using millis()) used to generate a new pipe for a certain number of seconds
@@ -164,6 +164,14 @@ void gameOverMenu() {
   text("YOU LOST WITH A SCORE OF:\n" + score/2, 300, 150);
   text("Type your name:", 300, 350);
   text(in + "\nPress the return key when you are done...", 300, 375);
+  image(tomceji, width/2, logoY); //Tom's swaggin' face
+  logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
+  if (logoY > 265) {    //
+    speedOfLogo *= -1;  //
+  }                     //
+  if (logoY < 235) {    //
+    speedOfLogo *= -1;  //
+  }  
 }
 
 
@@ -271,7 +279,7 @@ void checkFlappy() {
   if (tomY + 27 >= 491 && pipeMove) {
     pipeMove = false;
     goUp = true;
-    speed = -15;
+    speed = -10;
     tomY -= 5;
   }
   if (pipeMove) {
@@ -280,13 +288,13 @@ void checkFlappy() {
       if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 28 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
         pipeMove = false;
         goUp = true;
-        speed = -15;
+        speed = -10;
       }
       //bottom pipe hitbox
       else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
         pipeMove = false;
         goUp = true;
-        speed = -15;
+        speed = -10;
       }
       //between pipes hitbox
       else if (pipeXs.get(a) == 329)
