@@ -162,8 +162,8 @@ void gameOverMenu() {
   textAlign(CENTER);
   fill(255);
   text("YOU LOST WITH A SCORE OF:\n" + score/2, 300, 150);
-  text("Type your name:", 300, 350);
-  text(in + "\nPress the return key when you are done...", 300, 375);
+  text("Press your tilda key to continue\nOR type your name:", 300, 350);
+  text(in + "\nPress the return key when you are done...", 300, 400);
   image(tomceji, width/2, logoY); //Tom's swaggin' face
   logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
   if (logoY > 265) {    //
@@ -171,7 +171,7 @@ void gameOverMenu() {
   }                     //
   if (logoY < 235) {    //
     speedOfLogo *= -1;  //
-  }  
+  }
 }
 
 
@@ -185,14 +185,27 @@ void keyPressed() {
         table.setInt(rows, 1, score/2);
         saveTable(table, "data/scores.csv");
       }
-      mainMenu = true;
-      gameOver = false;
     }
-    if (key != '\n' && key != BACKSPACE) {
+    if (key != '\n' && key != BACKSPACE && key != '`' && key != '~') {
       in += key;
     }
     if (key == BACKSPACE && in.length() > 0) {
       in = in.substring(0, in.length() - 1);
+    }
+    if (key == '`' || key == '~') {
+      score = 0;
+      waitTime = millis() + 3000;
+      pipeXs.clear();
+      pipes.clear();
+      play = true;
+      mainMenu = false;
+      gameOver = false;
+      tomY = 2*height/5;
+      speed = 0;
+      in="";
+      out="";
+      pipeMove = true;
+      speed = 0;
     }
   }
   if (play && pipeMove) {
