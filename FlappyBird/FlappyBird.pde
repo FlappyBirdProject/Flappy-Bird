@@ -27,7 +27,7 @@ boolean pipeMove = true;
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
-float grav = 0.30; //"Force" applied downward on Tom's face ingame to simulate gravity
+float grav = 0.35; //"Force" applied downward on Tom's face ingame to simulate gravity
 
 int tomY; //Y coordinate of Tom's face ingame
 int waitTime; //Used with a timer (using millis()) used to generate a new pipe for a certain number of seconds
