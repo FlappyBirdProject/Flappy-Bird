@@ -83,39 +83,39 @@ void draw() {
   }
 }
 
-void drawMainMenu() {
+void drawMainMenu() { //Draws main menu
   textFont(flap20);
   drawPlayButton();
   drawScoresButton();
   drawLogo();
   image(tomceji, width/2, logoY); //Tom's swaggin' face
   logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
-  if (logoY > 265) {    //
-    speedOfLogo *= -1;  //
-  }                     //
-  if (logoY < 235) {    //
-    speedOfLogo *= -1;  //
-  }                     //
+  if (logoY > 265) {
+    speedOfLogo *= -1;
+  }
+  if (logoY < 235) {
+    speedOfLogo *= -1;
+  }
 }
 
-void playGame() {
+void playGame() { //Draws/runs game
   textFont(flap20);
   checkFlappy();
   pipe.drawPipes();
   image(tomceji, width/2, tomY); //Tom's swaggin' face
   if (millis() - waitTime >= 0) { //Timer - After 3 seconds, a pipe is generated every 1.75 second (the 3 seconds are determined when the mouse clicks the main menu's play button)
-    pipe.genPipe();               //
-    waitTime = millis() + 1750;   //
-  }                               //
+    pipe.genPipe();
+    waitTime = millis() + 1750;
+  }
   if (goUp) {      //Lets Tom fly when space bar is pressed
     speed -= grav; //Yup
-  }                //
-  else {           //
-    speed += grav; //Yup
-  }                //
+  }
+  else {
+    speed += grav; 
+  }
   if (speed <= 0) {//Makes Tom not "go up" if he has no more upward velocity
-    goUp = false;  //
-  }                //
+    goUp = false;
+  }
   tomY += speed;
   checkFlappy();
   textFont(flap48);
@@ -123,14 +123,14 @@ void playGame() {
   text(score/2, width/2, 1*width/4); //Score/2 because the for loop checking if Tom makes it runs twice, adding 2 points for each pipe (2fast2furious)
 }
 
-void drawScoreMenu() {
+void drawScoreMenu() { //Draws score menu
   fill(255);
   for (int z = 0; z < table.getRowCount(); z++) { //Gets data from table of scores and names and prints them on screen on separate rows
     textAlign(RIGHT);                             //Score
     text(table.getInt(z, 1), 500, y + z * 35);    //z*35 works because of the size of the font (sets y pos of each score)
-    textAlign(LEFT);                              //Player
-    text(table.getString(z, 0), 100, y + z * 35); //
-  }                                               //
+    textAlign(LEFT);
+    text(table.getString(z, 0), 100, y + z * 35); 
+  }
   fill(111, 206, 255);
   noStroke();
   rect(0, 0, 600, 160); //This rectangle covers the text if it moves above a high point (aesthetics yeh)
@@ -146,31 +146,31 @@ void drawScoreMenu() {
   textAlign(LEFT);
   text("PLAYER", 100, 150);
   if (keyPressed && key == CODED) { //Allows user to navigate scores (scroll thru them)
-    if (keyCode == UP) {            //
-      y -= 2;                       //
-    }                               //
-    if (keyCode == DOWN) {          //
-      y += 2;                       //
-    }                               //
-  }                                 //
+    if (keyCode == UP) {
+      y -= 2;
+    }
+    if (keyCode == DOWN) {
+      y += 2;
+    }
+  }
 }
 
-void gameOverMenu() {
+void gameOverMenu() { //Draws game over menu
   if (play) {
     gameOver = false;
   }
   textAlign(CENTER);
   fill(255);
   text("YOU LOST WITH A SCORE OF:\n" + score/2, 300, 150);
-  text("Press your tilda key to continue\nOR type your name:", 300, 350);
+  text("Press your tilde key to continue\nOR type your name:", 300, 350);
   text(in + "\nPress the return key when you are done...", 300, 400);
   image(tomceji, width/2, logoY); //Tom's swaggin' face
   logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
-  if (logoY > 265) {    //
-    speedOfLogo *= -1;  //
-  }                     //
-  if (logoY < 235) {    //
-    speedOfLogo *= -1;  //
+  if (logoY > 265) {
+    speedOfLogo *= -1;
+  }
+  if (logoY < 235) {
+    speedOfLogo *= -1;
   }
 }
 
@@ -187,27 +187,27 @@ void keyPressed() {
       }
     }
     if (key != '\n' && key != BACKSPACE && key != '`' && key != '~') {//If key isn't meant for special operation, add it to name entry
-      in += key;                                                      //
-    }                                                                 //
+      in += key;                                                      
+    }                                                                 
     if (key == BACKSPACE && in.length() > 0) {//If backspace and there is a character available
       in = in.substring(0, in.length() - 1);  //Delete rightmost character
-    }                                         //
-    if (key == '`' || key == '~') {//
-      score = 0;                   //
-      waitTime = millis() + 3000;  //
-      pipeXs.clear();              //
-      pipes.clear();               //
-      play = true;                 //
-      mainMenu = false;            //
-      gameOver = false;            //
-      tomY = 2*height/5;           //
-      speed = 0;                   //
-      in="";                       //
-      out="";                      //
-      pipeMove = true;             //
-      speed = 0;                   //
-    }                              //
-  }                                //
+    }                                         
+    if (key == '`' || key == '~') {
+      score = 0;
+      waitTime = millis() + 3000;
+      pipeXs.clear();
+      pipes.clear();
+      play = true;
+      mainMenu = false;
+      gameOver = false;
+      tomY = 2*height/5;
+      speed = 0;
+      in="";
+      out="";
+      pipeMove = true;
+      speed = 0;
+    }
+  }
   if (play && pipeMove) {
     if (key == ' ') {
       if (goUp) {
@@ -221,7 +221,7 @@ void keyPressed() {
   }
 }
 
-void backgroundFlappy() {
+void backgroundFlappy() { //Draws background (ground, sky, etc.)
   textFont(flap20);
   noStroke();
   strokeWeight(10);
@@ -234,7 +234,7 @@ void backgroundFlappy() {
   textAlign(LEFT);
   if (mainMenu == false) {
     text("main menu", 5, 595);
-    if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
+    if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) { //
       fill(54, 188, 2);
       text("main menu", 5, 595);
       if (mousePressed) {
