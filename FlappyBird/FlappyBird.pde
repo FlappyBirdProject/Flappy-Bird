@@ -23,11 +23,12 @@ boolean scoreMenu; //Checks if score menu is active
 boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
 boolean pipeMove = true;
+boolean jumped = false;
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
-float grav = 0.35; //"Force" applied downward on Tom's face ingame to simulate gravity
+float grav = 0.36; //"Force" applied downward on Tom's face ingame to simulate gravity
 
 int tomY; //Y coordinate of Tom's face ingame
 int waitTime; //Used with a timer (using millis()) used to generate a new pipe for a certain number of seconds
@@ -103,24 +104,31 @@ void playGame() { //Draws/runs game
   checkFlappy();
   pipe.drawPipes();
   image(tomceji, width/2, tomY); //Tom's swaggin' face
-  if (millis() - waitTime >= 0) { //Timer - After 3 seconds, a pipe is generated every 1.75 second (the 3 seconds are determined when the mouse clicks the main menu's play button)
+  if (millis() - waitTime >= 0 && jumped) { //Timer - After first jump, a pipe is generated every 1.75 second (the 3 seconds are determined when the mouse clicks the main menu's play button)
     pipe.genPipe();
     waitTime = millis() + 1750;
   }
   if (goUp) {      //Lets Tom fly when space bar is pressed
-    speed -= grav; //Yup
+    speed -= grav;
+    if (!jumped)
+      jumped = true;
   }
   else {
-    speed += grav; 
+    speed += grav;
   }
   if (speed <= 0) {//Makes Tom not "go up" if he has no more upward velocity
     goUp = false;
   }
-  tomY += speed;
+  if (jumped)
+    tomY += speed;
   checkFlappy();
   textFont(flap48);
   fill(255);
   text(score/2, width/2, 1*width/4); //Score/2 because the for loop checking if Tom makes it runs twice, adding 2 points for each pipe (2fast2furious)
+  if (!jumped) {
+    textFont(flap20);
+    text("Press space to flap!", 210, 350);
+  }
 }
 
 void drawScoreMenu() { //Draws score menu
@@ -129,7 +137,7 @@ void drawScoreMenu() { //Draws score menu
     textAlign(RIGHT);                             //Score
     text(table.getInt(z, 1), 500, y + z * 35);    //z*35 works because of the size of the font (sets y pos of each score)
     textAlign(LEFT);
-    text(table.getString(z, 0), 100, y + z * 35); 
+    text(table.getString(z, 0), 100, y + z * 35);
   }
   fill(111, 206, 255);
   noStroke();
@@ -187,14 +195,14 @@ void keyPressed() {
       }
     }
     if (key != '\n' && key != BACKSPACE && key != '`' && key != '~') {//If key isn't meant for special operation, add it to name entry
-      in += key;                                                      
+      in += key;
     }                                                                 
     if (key == BACKSPACE && in.length() > 0) {//If backspace and there is a character available
       in = in.substring(0, in.length() - 1);  //Delete rightmost character
     }                                         
     if (key == '`' || key == '~') {
+      jumped = false;
       score = 0;
-      waitTime = millis() + 3000;
       pipeXs.clear();
       pipes.clear();
       play = true;
@@ -257,8 +265,8 @@ void drawPlayButton() {
   else {
     image(playButtonHighlight, 215, 350);
     if (mousePressed) {
+      jumped = false;
       score = 0;
-      waitTime = millis() + 3000;
       pipeXs.clear();
       pipes.clear();
       play = true;
@@ -292,7 +300,7 @@ void checkFlappy() {
   if (tomY + 27 >= 491 && pipeMove) {
     pipeMove = false;
     goUp = true;
-    speed = -10;
+    speed = -15;
     tomY -= 5;
   }
   if (pipeMove) {
@@ -301,13 +309,13 @@ void checkFlappy() {
       if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 28 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
         pipeMove = false;
         goUp = true;
-        speed = -10;
+        speed = -15;
       }
       //bottom pipe hitbox
       else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
         pipeMove = false;
         goUp = true;
-        speed = -10;
+        speed = -15;
       }
       //between pipes hitbox
       else if (pipeXs.get(a) == 329)
@@ -330,7 +338,6 @@ class pipe {
       fill(0, 255, 0);
       rect(pipeXs.get(a), -10, 60, pipes.get(a));
       rect(pipeXs.get(a) - 20, pipes.get(a) - 10, 100, 35);
-
       rect(pipeXs.get(a), pipes.get(a) + 210, 60, height);
       rect(pipeXs.get(a) - 20, pipes.get(a) + 175, 100, 35);
       if (pipeMove)
