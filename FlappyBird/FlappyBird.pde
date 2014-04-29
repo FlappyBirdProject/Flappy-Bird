@@ -127,7 +127,7 @@ void drawScoreMenu() {
   fill(255);
   for (int z = 0; z < table.getRowCount(); z++) { //Gets data from table of scores and names and prints them on screen on separate rows
     textAlign(RIGHT);                             //Score
-    text(table.getInt(z, 1), 500, y + z * 35);    //z*35 works because of the size of the font
+    text(table.getInt(z, 1), 500, y + z * 35);    //z*35 works because of the size of the font (sets y pos of each score)
     textAlign(LEFT);                              //Player
     text(table.getString(z, 0), 100, y + z * 35); //
   }                                               //
@@ -177,37 +177,37 @@ void gameOverMenu() {
 
 void keyPressed() {
   if (gameOver) {
-    if (key == '\n') {
-      if (in.length() >= 1) {
-        out = in;
-        int rows = table.getRowCount();
-        table.setString(rows, 0, out);
-        table.setInt(rows, 1, score/2);
-        saveTable(table, "data/scores.csv");
+    if (key == '\n') {                      //Enter/return key (newline character)
+      if (in.length() >= 1) {               //Can't have blank entry
+        out = in;                           //"Out" is a String meant to carry entered name to file
+        int rows = table.getRowCount();     //Checks numer of entries in scores file
+        table.setString(rows, 0, out);      //Adds name to new row
+        table.setInt(rows, 1, score/2);     //Adds score to new row
+        saveTable(table, "data/scores.csv");//Saves table of entries to CSV file
       }
     }
-    if (key != '\n' && key != BACKSPACE && key != '`' && key != '~') {
-      in += key;
-    }
-    if (key == BACKSPACE && in.length() > 0) {
-      in = in.substring(0, in.length() - 1);
-    }
-    if (key == '`' || key == '~') {
-      score = 0;
-      waitTime = millis() + 3000;
-      pipeXs.clear();
-      pipes.clear();
-      play = true;
-      mainMenu = false;
-      gameOver = false;
-      tomY = 2*height/5;
-      speed = 0;
-      in="";
-      out="";
-      pipeMove = true;
-      speed = 0;
-    }
-  }
+    if (key != '\n' && key != BACKSPACE && key != '`' && key != '~') {//If key isn't meant for special operation, add it to name entry
+      in += key;                                                      //
+    }                                                                 //
+    if (key == BACKSPACE && in.length() > 0) {//If backspace and there is a character available
+      in = in.substring(0, in.length() - 1);  //Delete rightmost character
+    }                                         //
+    if (key == '`' || key == '~') {//
+      score = 0;                   //
+      waitTime = millis() + 3000;  //
+      pipeXs.clear();              //
+      pipes.clear();               //
+      play = true;                 //
+      mainMenu = false;            //
+      gameOver = false;            //
+      tomY = 2*height/5;           //
+      speed = 0;                   //
+      in="";                       //
+      out="";                      //
+      pipeMove = true;             //
+      speed = 0;                   //
+    }                              //
+  }                                //
   if (play && pipeMove) {
     if (key == ' ') {
       if (goUp) {
