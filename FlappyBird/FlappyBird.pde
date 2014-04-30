@@ -192,6 +192,8 @@ void keyPressed() {
         table.setString(rows, 0, out);      //Adds name to new row
         table.setInt(rows, 1, score/2);     //Adds score to new row
         saveTable(table, "data/scores.csv");//Saves table of entries to CSV file
+        gameOver = false;
+        mainMenu = true;
       }
     }
     if (key != '\n' && key != BACKSPACE && key != '`' && key != '~') {//If key isn't meant for special operation, add it to name entry
