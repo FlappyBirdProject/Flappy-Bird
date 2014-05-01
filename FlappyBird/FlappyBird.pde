@@ -124,7 +124,7 @@ void playGame() { //Draws/runs game
   checkFlappy();
   textFont(flap48);
   fill(255);
-  text(score/2, width/2, 1*width/4); //Score/2 because the for loop checking if Tom makes it runs twice, adding 2 points for each pipe (2fast2furious)
+  text(score/2, width/2 - 10, 1*width/4); //Score/2 because the for loop checking if Tom makes it runs twice, adding 2 points for each pipe (2fast2furious)
   if (!jumped) {
     textFont(flap20);
     text("Press space to flap!", 210, 350);
@@ -320,7 +320,7 @@ void checkFlappy() {
         speed = -15;
       }
       //between pipes hitbox
-      else if (pipeXs.get(a) == 329)
+      else if (pipeXs.get(a) == 266)
         score++;
     }
   }
@@ -342,13 +342,13 @@ class pipe {
       rect(pipeXs.get(a) - 20, pipes.get(a) - 10, 100, 35);
       rect(pipeXs.get(a), pipes.get(a) + 210, 60, height);
       rect(pipeXs.get(a) - 20, pipes.get(a) + 175, 100, 35);
-      if (pipeMove)
-        pipeXs.sub(a, 3);
+      if (pipeMove)      //If game isn't over (pipes still moving), 
+        pipeXs.sub(a, 3);//Subtract 3 from each pipe's x coordinate
     }
   }
 
   void genPipe() {
-    pipes.append((int)random(50, 250));
+    pipes.append((int)random(50, 250)); //
     pipeXs.append(620);
   }
 }
