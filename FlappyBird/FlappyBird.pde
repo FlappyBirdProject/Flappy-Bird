@@ -29,8 +29,8 @@ float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
 float speed; //Speed of Tom's face ingame
 float grav = 0.36; //"Force" applied downward on Tom's face ingame to simulate gravity
+float tomY; //Y coordinate of Tom's face ingame
 
-int tomY; //Y coordinate of Tom's face ingame
 int waitTime; //Used with a timer (using millis()) used to generate a new pipe for a certain number of seconds
 int score; //Score held for player
 int yTop; //Top of Tom
@@ -67,8 +67,8 @@ void draw() {
   background(111, 206, 255); //Dat Flappy Blue
   if (score >= 1000) //If you (for some reason) have a score of 1000+, you get a groovy background
     background(random(256), random(256), random(256));
-  yTop = tomY - 36; //Always sets Tom's top pos relative to his y coordinate
-  yBot = tomY + 36; //Always sets Tom's bot pos relative to his y coordinate
+  yTop = (int)tomY - 36; //Always sets Tom's top pos relative to his y coordinate
+  yBot = (int)tomY + 36; //Always sets Tom's bot pos relative to his y coordinate
   if (play) {
     playGame();
   }
@@ -91,10 +91,7 @@ void drawMainMenu() { //Draws main menu
   drawLogo();
   image(tomceji, width/2, logoY); //Tom's swaggin' face
   logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
-  if (logoY > 265) {
-    speedOfLogo *= -1;
-  }
-  if (logoY < 235) {
+  if (logoY > 265 || logoY < 235) {
     speedOfLogo *= -1;
   }
 }
@@ -119,14 +116,17 @@ void playGame() { //Draws/runs game
   if (speed <= 0) {//Makes Tom not "go up" if he has no more upward velocity
     goUp = false;
   }
-  if (jumped)
-    tomY += speed;
   checkFlappy();
   textFont(flap48);
   fill(255);
   text(score/2, width/2 - 10, 1*width/4); //Score/2 because the for loop checking if Tom makes it runs twice, adding 2 points for each pipe (2fast2furious)
+  if (jumped)
+    tomY+=speed;
   if (!jumped) {
     textFont(flap20);
+    tomY += speedOfLogo;
+    if (tomY > 265 || tomY < 235)
+      speedOfLogo*=-1;
     text("Press space to flap!", 210, 350);
   }
 }
@@ -207,9 +207,9 @@ void keyPressed() {
       score = 0;
       pipeXs.clear();
       pipes.clear();
-      play = true;
       mainMenu = false;
       gameOver = false;
+      play = true;
       tomY = 2*height/5;
       speed = 0;
       in="";
@@ -302,7 +302,7 @@ void checkFlappy() {
   if (tomY + 27 >= 491 && pipeMove) {
     pipeMove = false;
     goUp = true;
-    speed = -15;
+    speed = -10;
     tomY -= 5;
   }
   if (pipeMove) {
@@ -311,13 +311,13 @@ void checkFlappy() {
       if (yBot >= pipes.get(a) - 7 && yTop <= pipes.get(a) + 28 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yTop <= pipes.get(a) - 10 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
         pipeMove = false;
         goUp = true;
-        speed = -15;
+        speed = -10;
       }
       //bottom pipe hitbox
       else if (yBot >= pipes.get(a) + 170 && yTop <= pipes.get(a) + 215 && pipeXs.get(a) + 80 >= 274 && pipeXs.get(a) - 20 <= 320 || yBot >= pipes.get(a) + 210 && pipeXs.get(a) <= 328 && pipeXs.get(a) >= 320) {
         pipeMove = false;
         goUp = true;
-        speed = -15;
+        speed = -10;
       }
       //between pipes hitbox
       else if (pipeXs.get(a) == 266)
