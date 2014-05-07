@@ -1,148 +1,161 @@
-//****************************//
-//         Flappy Tom!        //
-//      by Eric Lindau and    //
-//        Fisher Darling      //
-//****************************//
+//Declaring the Image names and what they hold
+PImage tomceji; //56x74
+PImage logo;
+PImage playButton;
+PImage scoresButton;
+PImage playButtonHighlight;
+PImage scoresButtonHighlight;
 
-PImage tomceji; //Tom's picture ... 56x74 (54x72 without considering useless pixels)
-PImage logo; //"Flappy Tom" logo
-PImage playButton; //Play button's image
-PImage scoresButton; //Score button's image
-PImage playButtonHighlight; //Image of the play button when hovered over
-PImage scoresButtonHighlight; //Image of the score button when hovered over
+//The Beautiful 20 size font
+PFont flap20;
+//size 48
+PFont flap48;
 
-PFont flap20; //The beautiful size 20 font
-PFont flap48; //size 48
+//The menu booleans
+boolean mainMenu;
+boolean play;
+boolean scoreMenu;
+boolean gameOver;
+boolean randPipe;
+boolean goUp;
+boolean draw;
 
-boolean mainMenu; //Checks if main menu is active
-boolean play; //Checks if game is playing
-boolean scoreMenu; //Checks if score menu is active`
-boolean gameOver; //Checks if player loses
-boolean goUp; //Checks if player wants to "flap" (move up)
-boolean pipeMove = true;
-boolean jumped = false;
+//Game variables with location and timing/scoring
+float logoX = 300;
+float logoY = 250;
+float speedOfLogo = .5;
+float speed;
+float grav = 0.15;
+float i;
 
-float logoY = 250; //Y coordinate of Tom's face on the main menu
-float speedOfLogo = .5; //Speed of Tom's face on the main menu
-float speed; //Speed of Tom's face ingame
-float grav = 0.36; //"Force" applied downward on Tom's face ingame to simulate gravity
-float tomY; //Y coordinate of Tom's face ingame
+int tomY;
+int waitStart = 5000;
+int score;
+int yTop;
+int yBot;
+int xRight;
+int z;
+int y = 185;
+int wait;
 
-int waitTime; //Used with a timer (using millis()) used to generate a new pipe for a certain number of seconds
-int yTop; //Top of Tom
-int yBot; //Bot of Tom
-int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
+String in = "";
+String out = "";
 
-String in = ""; //In the score screen, this String is used to display the current name to be saved with the current score
-String out = ""; //Once enter is pressed, out is saved as in's last entry and saved in a CSV file along with the score
+Table table;
 
-Table table; //The table of scores and names
+IntList scoreVals;
+StringList nameStr;
 
-Pipe[] pipes;
-Score score;
+//This here is Java in a nutshell.... (I hate Oracle -Eric)
+pipe pipe = new pipe();
 
 void setup() {
   imageMode(CENTER);
   size(600, 600);
-  tomceji = loadImage("tomceji.png"); //Tom's cropped picture
-  logo = loadImage("logo.png"); //"Flappy Tom" on the main menu
-  playButton = loadImage("playButton.png"); //Image for the play button on main menu
-  scoresButton = loadImage("scoresButton.png"); //Image for the score button on main menu
-  playButtonHighlight = loadImage("playButtonHighlight.png"); //Image for play button on main menu when hovered over
-  scoresButtonHighlight = loadImage("scoresButtonHighlight.png"); //Image for scores button on main menu when hovered over
-  flap20 = loadFont("04b19-20.vlw"); //Load size 20 font
-  flap48 = loadFont("04b19-48.vlw"); //Load size 48 font
+  scoreVals = new IntList();
+  nameStr = new StringList();
+  //loading the images fonts and sound to RAM
+  tomceji = loadImage("tomceji.jpg");
+  logo = loadImage("logo.png");
+  playButton = loadImage("playButton.png"); 
+  scoresButton = loadImage("scoresButton.png");
+  playButtonHighlight = loadImage("playButtonHighlight.png");
+  scoresButtonHighlight = loadImage("scoresButtonHighlight.png");
+  flap20 = loadFont("04b19-20.vlw");
+  flap48 = loadFont("04b19-48.vlw");
   backgroundFlappy();
-  mainMenu = true; //Sends player to main menu by default
-  tomY = 2*height/5; //Sets Tom's position to a near-center position initially
-  table = loadTable("scores.csv", "header"); //Loads the score/name table
-  pipes = new Pipe[3];
-  score = new Score(0);
-  for (int a = 0; a < pipes.length; a++) {
-    pipes[a] = new Pipe(a*300+700, (int)random(50, 250));
-  }
+  mainMenu = true;
+  tomY = 2*height/5;
+  table = loadTable("scores.csv", "header");
 }
 
 void draw() {
-  background(111, 206, 255); //Dat Flappy Blue
-  if (score.getScore() >= 1000) //If you (for some reason) have a score of 1000+, you get a groovy background
-    background(random(256), random(256), random(256));
-  yTop = (int)tomY - 36; //Always sets Tom's top pos relative to his y coordinate
-  yBot = (int)tomY + 36; //Always sets Tom's bot pos relative to his y coordinate
+  yTop = tomY - 37;
+  yBot = tomY + 37;
+  xRight = 328;
+  backgroundFlappy();
+  if (mainMenu) {
+    drawMainMenu();
+  }
   if (play) {
+    gameOver = false;
     playGame();
   }
   if (scoreMenu) {
     drawScoreMenu();
   }
-  backgroundFlappy(); //This is drawn after the score menu so that the text goes under the ground if it is moved so
-  if (mainMenu) {
-    drawMainMenu();
-  }
   if (gameOver) {
     gameOverMenu();
   }
+  if (scoreMenu == false) {
+    y = 185;
+  }
 }
 
-void drawMainMenu() { //Draws main menu
+void drawMainMenu() {
   textFont(flap20);
   drawPlayButton();
   drawScoresButton();
-  image(logo, 300, 150);
-  image(tomceji, width/2, logoY); //Tom's swaggin' face
-  logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
-  if (logoY > 265 || logoY < 235) {
+  drawLogo();
+  image(tomceji, logoX, logoY);
+  logoY += speedOfLogo;
+  if (logoY > 265) {
+    speedOfLogo *= -1;
+  }
+  if (logoY < 235) {
     speedOfLogo *= -1;
   }
 }
 
-void playGame() { //Draws/runs game
+void playGame() {
+  score = 0;
+  out = "";
+  in = "";
   textFont(flap20);
-  for (int a = 0; a < pipes.length; a++) {
-    pipes[a].drawPipe();
-    if (pipeMove && jumped) {
-      pipes[a].movePipe();
-      pipes[a].checkPipe();
-    }
+  checkFlappy();
+  image(tomceji, width/2, tomY);
+  //make first pipe appear here
+  if (millis() - wait >= waitStart) {
+    randPipe = true;
+    draw = true;
   }
-  image(tomceji, width/2, tomY); //Tom's swaggin' face
-  if (goUp) {      //Lets Tom fly when space bar is pressed
+  if (randPipe) {
+    i = random(100, 400);
+    randPipe = false;
+    println(i);
+  }
+  if (goUp) {
     speed -= grav;
-    if (!jumped)
-      jumped = true;
   }
   else {
     speed += grav;
   }
-  if (speed <= 0) {//Makes Tom not "go up" if he has no more upward velocity
+  if (speed <= 0) {
     goUp = false;
   }
-  checkFlappy();
-  textFont(flap48);
-  fill(255);
-  text(score.getScore(), width/2 - 10, 1*width/4); //Score/2 because the for loop checking if Tom makes it runs twice, adding 2 points for each pipe (2fast2furious)
-  if (jumped)
-    tomY+=speed;
-  if (!jumped) {
-    textFont(flap20);
-    tomY += speedOfLogo;
-    if (tomY > 265 || tomY < 235)
-      speedOfLogo*=-1;
-    text("Press space to flap!", 210, 350);
+  tomY += speed;
+  //checks if he hits ground ... will add check for him hitting pipes once pipes are added!
+  if (tomY >= 458 || yTop <= 37) {
+    gameOver = true;
+    play = false;
   }
 }
 
-void drawScoreMenu() { //Draws score menu
+void drawScoreMenu() {
   fill(255);
-  for (int z = 0; z < table.getRowCount(); z++) { //Gets data from table of scores and names and prints them on screen on separate rows
-    textAlign(RIGHT);                             //Score
-    text(table.getInt(z, 1), 500, y + z * 35);    //z*35 works because of the size of the font (sets y pos of each score)
+  for (z = 0; z < table.getRowCount(); z++) {
+    textAlign(RIGHT);
+    text(table.getInt(z, 1), 500, y + z * 35);
     textAlign(LEFT);
     text(table.getString(z, 0), 100, y + z * 35);
   }
   fill(111, 206, 255);
   noStroke();
-  rect(0, 0, 600, 160); //This rectangle covers the text if it moves above a high point (aesthetics yeh)
+  rect(0, 0, 600, 160);
+  strokeWeight(10);
+  stroke(54, 188, 2);
+  fill(234, 237, 165);
+  rect(-11, 500, 621, 110);
   fill(255);
   textAlign(CENTER);
   textFont(flap20);
@@ -154,57 +167,79 @@ void drawScoreMenu() { //Draws score menu
   text("SCORE", 500, 150);
   textAlign(LEFT);
   text("PLAYER", 100, 150);
-  if (keyPressed && key == CODED) { //Allows user to navigate scores (scroll thru them)
-    if (keyCode == DOWN) {
+  textAlign(RIGHT);
+  fill(122, 126, 4);
+  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
+  textAlign(LEFT);
+  text("main menu", 5, 595);
+  if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
+    fill(0, 0, 255);
+    text("main menu", 5, 595);
+    if (mousePressed) {
+      mainMenu = true;
+      play = false;
+      scoreMenu = false;
+      gameOver = false;
+    }
+  }
+  if (keyPressed && key == CODED) {
+    if (keyCode == UP) {
       y -= 2;
     }
-    if (keyCode == UP) {
+    if (keyCode == DOWN) {
       y += 2;
     }
   }
 }
 
-void gameOverMenu() { //Draws game over menu
-  if (play) {
-    gameOver = false;
-  }
+void gameOverMenu() {
   textAlign(CENTER);
   fill(255);
-  text("YOU LOST WITH A SCORE OF:\n" + score.getScore(), 300, 150);
-  text("Press your tilde key to continue\nOR type your name:", 300, 350);
-  text(in + "\nPress the return key when you are done...", 300, 400);
-  image(tomceji, width/2, logoY); //Tom's swaggin' face
-  logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
-  if (logoY > 265 || logoY < 235) {
-    speedOfLogo *= -1;
+  text("YOU LOST WITH A SCORE OF:\n" + score, 300, 150);
+  text("Click anywhere to continue without saving score", 300, 250);
+  text("Type your name:", 300, 350);
+  text(in + "\nPress the return key when you are done...", 300, 375);
+}
+
+void mousePressed() {
+  if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
+    fill(0, 0, 255);
+    text("main menu", 5, 595);
+    if (mousePressed) {
+      mainMenu = true;
+      play = false;
+      scoreMenu = false;
+      gameOver = false;
+    }
+  }
+  if (gameOver) {
+    gameOver = false;
+    mainMenu = true;
+    tomY = 2*height/5;
+    speed = 0;
   }
 }
 
 
 void keyPressed() {
   if (gameOver) {
-    if (key == '\n') {                      //Enter/return key (newline character)
-      if (in.length() >= 1) {               //Can't have blank entry
-        out = in;                           //"Out" is a String meant to carry entered name to file
-        int rows = table.getRowCount();     //Checks numer of entries in scores file
-        table.setString(rows, 0, out);      //Adds name to new row
-        table.setInt(rows, 1, score.getScore());     //Adds score to new row
-        saveTable(table, "data/scores.csv");//Saves table of entries to CSV file
-        gameOver = false;
-        mainMenu = true;
-      }
+    if (key == '\n') {
+      out = in;
+      int rows = table.getRowCount();
+      table.setString(rows, 0, out);
+      table.setInt(rows, 1, score);
+      saveTable(table, "data/scores.csv");
+      mainMenu = true;
+      gameOver = false;
     }
-    if (key != '\n' && key != BACKSPACE && key != '`' && key != '~') {//If key isn't meant for special operation, add it to name entry
+    if (key != '\n' && key != BACKSPACE) {
       in += key;
-    }                                                                 
-    if (key == BACKSPACE && in.length() > 0) {//If backspace and there is a character available
-      in = in.substring(0, in.length() - 1);  //Delete rightmost character
-    }                                         
-    if (key == '`' || key == '~') {
-      resetGame();
+    }
+    if (key == BACKSPACE && in.length() > 0) {
+      in = in.substring(0, in.length() - 1);
     }
   }
-  if (play && pipeMove) {
+  if (play) {
     if (key == ' ') {
       if (goUp) {
         goUp = false;
@@ -217,9 +252,11 @@ void keyPressed() {
   }
 }
 
-void backgroundFlappy() { //Draws background (ground, sky, etc.)
+void backgroundFlappy() {
   textFont(flap20);
   noStroke();
+  fill(111, 206, 255);
+  rect(-1, 0, 601, 495);
   strokeWeight(10);
   stroke(54, 188, 2);
   fill(234, 237, 165);
@@ -230,11 +267,10 @@ void backgroundFlappy() { //Draws background (ground, sky, etc.)
   textAlign(LEFT);
   if (mainMenu == false) {
     text("main menu", 5, 595);
-    if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) { //
-      fill(54, 188, 2);
+    if (mouseX >= 5 && mouseX <= 105 && mouseY <= 595 && mouseY >= 580) {
+      fill(0, 0, 255);
       text("main menu", 5, 595);
       if (mousePressed) {
-        y = 185;
         mainMenu = true;
         play = false;
         scoreMenu = false;
@@ -253,7 +289,8 @@ void drawPlayButton() {
   else {
     image(playButtonHighlight, 215, 350);
     if (mousePressed) {
-      resetGame();
+      play = true;
+      mainMenu = false;
     }
   }
 }
@@ -272,32 +309,27 @@ void drawScoresButton() {
 }
 
 void checkFlappy() {
-  //floor hitbox
-  if (tomY + 27 >= 477 && pipeMove) {
-    pipeMove = false;
-    goUp = true;
-    speed = -10;
-    tomY -= 5;
-  }
-  if (tomY + 27 >= 477 && !pipeMove) {
-    gameOver = true;
-    play = false;
-  }
 }
 
-void resetGame() {
-  score = new Score(0);
-  for (int a = 0; a < pipes.length; a++) {
-    pipes[a].reset(a*300+700);
+void drawLogo() {
+  image(logo, 300, 150);
+}
+
+public class pipe {
+
+  /*int topY;
+   int botY;
+   int pipeY;*/
+
+  int pipeX = 615;
+
+  void drawPipe(float i) {
+    fill(0, 255, 0);
+    rect(pipeX, i - 1, 80, i);
+    rect(pipeX - 20, i - 25, 120, 35);
+    rect(pipeX, i + 200, 80, height);
+    rect(pipeX - 20, i + 185, 120, 35);
+    pipeX -= 1.7;
   }
-  play = true;
-  mainMenu = false;
-  gameOver = false;
-  tomY = 2*height/5;
-  speed = 0;
-  in="";
-  out="";
-  pipeMove = true;
-  speed = 0;
 }
 
