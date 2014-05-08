@@ -33,12 +33,8 @@ public class Pipe {
       speed = -10;
     }
     //between pipes hitbox
-    else if (xPos == 266)
-      score.incScore(1);
-  }
-  public void reset(int x) {
-    xPos = x;
-    randSize = (int)random(50, 250);
+    else if (xPos > 297 && xPos<=300)
+      score.incScore();
   }
 }
 

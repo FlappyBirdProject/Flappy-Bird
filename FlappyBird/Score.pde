@@ -3,11 +3,11 @@ public class Score {
   public Score(int s) {
     score = s;
   }
-  public void incScore(int n) {
-   score += n; 
+  public void incScore() {
+   score++; 
   }
   public int getScore() {
-   return score/2; 
+   return score; 
   }
 }
 

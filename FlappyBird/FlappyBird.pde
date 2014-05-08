@@ -120,7 +120,7 @@ void playGame() { //Draws/runs game
   checkFlappy();
   textFont(flap48);
   fill(255);
-  text(score.getScore(), width/2 - 10, 1*width/4); //Score/2 because the for loop checking if Tom makes it runs twice, adding 2 points for each pipe (2fast2furious)
+  text(score.getScore(), width/2 - 10, 1*width/4);
   if (jumped)
     tomY+=speed;
   if (!jumped) {
@@ -286,9 +286,10 @@ void checkFlappy() {
 }
 
 void resetGame() {
+  jumped = false;
   score = new Score(0);
   for (int a = 0; a < pipes.length; a++) {
-    pipes[a].reset(a*300+700);
+    pipes[a] = new Pipe(a*300+700, (int)random(50, 250));
   }
   play = true;
   mainMenu = false;
