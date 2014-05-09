@@ -19,6 +19,7 @@ public class Pipe {
     xPos -= 3;
   }
   public void checkPipe() {
+    //top pipe hitbox
     if (xPos <= -100)
       xPos = 800;
     if (yBot >= randSize - 7 && yTop <= randSize + 28 && xPos + 80 >= 274 && xPos - 20 <= 320 || yTop <= randSize - 10 && xPos <= 328 && xPos >= 320) {

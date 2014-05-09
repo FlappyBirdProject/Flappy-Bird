@@ -279,7 +279,7 @@ void checkFlappy() {
     speed = -10;
     tomY -= 5;
   }
-  if (tomY + 27 >= 477 && !pipeMove) {
+  if (tomY + 27 >= 450 && !pipeMove) {
     gameOver = true;
     play = false;
   }
@@ -291,6 +291,7 @@ void resetGame() {
   for (int a = 0; a < pipes.length; a++) {
     pipes[a] = new Pipe(a*300+700, (int)random(50, 250));
   }
+  pipeMove = true;
   play = true;
   mainMenu = false;
   gameOver = false;
@@ -298,7 +299,6 @@ void resetGame() {
   speed = 0;
   in="";
   out="";
-  pipeMove = true;
   speed = 0;
 }
 
