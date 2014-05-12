@@ -206,16 +206,11 @@ void keyPressed() {
   }
   if (play && pipeMove) {
     if (key == ' ') {
-      if (goUp) {
-        goUp = false;
-      }
-      else {
         speed = -5;
         goUp = true;
       }
     }
   }
-}
 
 void backgroundFlappy() { //Draws background (ground, sky, etc.)
   textFont(flap20);
@@ -273,13 +268,12 @@ void drawScoresButton() {
 
 void checkFlappy() {
   //floor hitbox
-  if (tomY + 27 >= 477 && pipeMove) {
+  if (tomY + 27 >= 480 && pipeMove) {
     pipeMove = false;
-    goUp = true;
     speed = -10;
     tomY -= 5;
   }
-  if (tomY + 27 >= 450 && !pipeMove) {
+  if (tomY + 27 >= 490 && !pipeMove) {
     gameOver = true;
     play = false;
   }
