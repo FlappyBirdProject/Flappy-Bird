@@ -22,19 +22,21 @@ public class Pipe {
     //top pipe hitbox
     if (xPos <= -100)
       xPos = 800;
-    if (yBot >= randSize - 7 && yTop <= randSize + 28 && xPos + 80 >= 274 && xPos - 20 <= 320 || yTop <= randSize - 10 && xPos <= 328 && xPos >= 320) {
-      pipeMove = false;
-      goUp = true;
-      speed = -10;
-    }
-    //bottom pipe hitbox
-    else if (yBot >= randSize + 170 && yTop <= randSize + 215 && xPos + 80 >= 274 && xPos - 20 <= 320 || yBot >= randSize + 210 && xPos <= 328 && xPos >= 320) {
-      pipeMove = false;
-      goUp = true;
-      speed = -10;
+    if (!easterEgg) {
+      if (yBot >= randSize - 7 && yTop <= randSize + 28 && xPos + 80 >= 274 && xPos - 20 <= 320 || yTop <= randSize - 10 && xPos <= 328 && xPos >= 320) {
+        pipeMove = false;
+        goUp = true;
+        speed = -10;
+      }
+      //bottom pipe hitbox
+      else if (yBot >= randSize + 170 && yTop <= randSize + 215 && xPos + 80 >= 274 && xPos - 20 <= 320 || yBot >= randSize + 210 && xPos <= 328 && xPos >= 320) {
+        pipeMove = false;
+        goUp = true;
+        speed = -10;
+      }
     }
     //between pipes hitbox
-    else if (xPos > 297 && xPos<=300)
+    else if (xPos > 297 && xPos<= 300)
       score.incScore();
   }
 }

@@ -19,8 +19,9 @@ boolean play; //Checks if game is playing
 boolean scoreMenu; //Checks if score menu is active`
 boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
-boolean pipeMove = true;
-boolean jumped = false;
+boolean pipeMove = true; //If pipes are allowed to move left
+boolean jumped = false; //If Tom has 'jumped'
+boolean easterEgg;
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
@@ -84,7 +85,7 @@ void draw() {
   }
 }
 
-void drawMainMenu() { //Draws main menu
+void drawMainMenu() {
   textFont(flap20);
   drawPlayButton();
   drawScoresButton();
@@ -96,7 +97,7 @@ void drawMainMenu() { //Draws main menu
   }
 }
 
-void playGame() { //Draws/runs game
+void playGame() {
   textFont(flap20);
   for (int a = 0; a < pipes.length; a++) {
     pipes[a].drawPipe();
@@ -114,7 +115,7 @@ void playGame() { //Draws/runs game
   else {
     speed += grav;
   }
-  if (speed <= 0) {//Makes Tom not "go up" if he has no more upward velocity
+  if (speed <= 0) {
     goUp = false;
   }
   checkFlappy();
@@ -132,7 +133,7 @@ void playGame() { //Draws/runs game
   }
 }
 
-void drawScoreMenu() { //Draws score menu
+void drawScoreMenu() {
   fill(255);
   for (int z = 0; z < table.getRowCount(); z++) { //Gets data from table of scores and names and prints them on screen on separate rows
     textAlign(RIGHT);                             //Score
@@ -164,7 +165,7 @@ void drawScoreMenu() { //Draws score menu
   }
 }
 
-void gameOverMenu() { //Draws game over menu
+void gameOverMenu() {
   if (play) {
     gameOver = false;
   }
@@ -206,11 +207,11 @@ void keyPressed() {
   }
   if (play && pipeMove) {
     if (key == ' ') {
-        speed = -5;
-        goUp = true;
-      }
+      speed = -5;
+      goUp = true;
     }
   }
+}
 
 void backgroundFlappy() { //Draws background (ground, sky, etc.)
   textFont(flap20);
@@ -279,10 +280,15 @@ void checkFlappy() {
   }
 }
 
+void mousePressed() {
+  if (mouseX <= width - 10 && mouseX >= width - 25 && mouseY <= height - 2 && mouseY >= height - 10)
+    easterEgg = !easterEgg;
+}
+
 void resetGame() {
   jumped = false;
   score = new Score(0);
-  for (int a = 0; a < pipes.length; a++) {
+  for (int a = 0; a < pipes.length; a++) { //remake all pipes
     pipes[a] = new Pipe(a*300+700, (int)random(50, 250));
   }
   pipeMove = true;
@@ -290,7 +296,6 @@ void resetGame() {
   mainMenu = false;
   gameOver = false;
   tomY = 2*height/5;
-  speed = 0;
   in="";
   out="";
   speed = 0;
