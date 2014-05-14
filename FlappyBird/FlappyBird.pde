@@ -218,6 +218,8 @@ void backgroundFlappy() { //Draws background (ground, sky, etc.)
   noStroke();
   strokeWeight(10);
   stroke(54, 188, 2);
+  if (easterEgg)
+    stroke(200, 0, 0);
   fill(234, 237, 165);
   rect(-11, 500, 621, 110);
   fill(122, 126, 4);
@@ -281,7 +283,7 @@ void checkFlappy() {
 }
 
 void mousePressed() {
-  if (mouseX <= width - 10 && mouseX >= width - 25 && mouseY <= height - 2 && mouseY >= height - 10)
+  if (mouseX <= width - 7 && mouseX >= width - 20 && mouseY <= height - 2 && mouseY >= height - 20)
     easterEgg = !easterEgg;
 }
 

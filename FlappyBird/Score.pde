@@ -4,10 +4,10 @@ public class Score {
     score = s;
   }
   public void incScore() {
-   score++; 
+    score++;
   }
   public int getScore() {
-   return score; 
+    return score;
   }
 }
 
