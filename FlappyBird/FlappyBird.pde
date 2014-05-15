@@ -1,8 +1,18 @@
-  //****************************//
+import ddf.minim.spi.*;
+import ddf.minim.signals.*;
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.ugens.*;
+import ddf.minim.effects.*;
+
+//****************************//
 //         Flappy Tom!        //
 //      by Eric Lindau and    //
 //        Fisher Darling      //
 //****************************//
+
+AudioPlayer spooks;
+Minim min;
 
 PImage tomceji; //Tom's picture ... 56x74 (54x72 without considering useless pixels)
 PImage logo; //"Flappy Tom" logo
@@ -58,7 +68,10 @@ void setup() {
   table = loadTable("scores.csv", "header"); //Loads the score/name table
   pipes = new Pipe[3];
   score = new Score(0);
-  for (int a = 0; a < pipes.length; a++) {
+  min = new Minim(this);
+  spooks = min.loadFile("spook.mp3");
+  spooks.loop(100);
+    for (int a = 0; a < pipes.length; a++) {
     pipes[a] = new Pipe(a*300+700, (int)random(50, 250));
   }
 }
