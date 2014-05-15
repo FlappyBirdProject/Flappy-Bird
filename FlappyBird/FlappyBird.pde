@@ -1,4 +1,4 @@
-//****************************//
+  //****************************//
 //         Flappy Tom!        //
 //      by Eric Lindau and    //
 //        Fisher Darling      //
@@ -21,7 +21,6 @@ boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
 boolean pipeMove = true; //If pipes are allowed to move left
 boolean jumped = false; //If Tom has 'jumped'
-boolean easterEgg;
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
@@ -218,8 +217,6 @@ void backgroundFlappy() { //Draws background (ground, sky, etc.)
   noStroke();
   strokeWeight(10);
   stroke(54, 188, 2);
-  if (easterEgg)
-    stroke(200, 0, 0);
   fill(234, 237, 165);
   rect(-11, 500, 621, 110);
   fill(122, 126, 4);
@@ -281,12 +278,6 @@ void checkFlappy() {
     play = false;
   }
 }
-
-void mousePressed() {
-  if (mouseX <= width - 7 && mouseX >= width - 20 && mouseY <= height - 2 && mouseY >= height - 20)
-    easterEgg = !easterEgg;
-}
-
 void resetGame() {
   jumped = false;
   score = new Score(0);
