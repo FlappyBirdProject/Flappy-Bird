@@ -1,4 +1,4 @@
-import ddf.minim.spi.*;
+ import ddf.minim.spi.*;
 import ddf.minim.signals.*;
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -74,6 +74,7 @@ void setup() {
     for (int a = 0; a < pipes.length; a++) {
     pipes[a] = new Pipe(a*300+700, (int)random(50, 250));
   }
+  frameRate(59);
 }
 
 void draw() {
