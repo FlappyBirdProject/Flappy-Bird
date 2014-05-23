@@ -1,18 +1,8 @@
- import ddf.minim.spi.*;
-import ddf.minim.signals.*;
-import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.ugens.*;
-import ddf.minim.effects.*;
-
 //****************************//
 //         Flappy Tom!        //
 //      by Eric Lindau and    //
-//        Fisher Darling      //
+//        Vinay Merchant      //
 //****************************//
-
-AudioPlayer spooks;
-Minim min;
 
 PImage tomceji; //Tom's picture ... 56x74 (54x72 without considering useless pixels)
 PImage logo; //"Flappy Tom" logo
@@ -43,6 +33,7 @@ int yTop; //Top of Tom
 int yBot; //Bot of Tom
 int y = 185; //Y coordinate of the first string of text from the table to print in the score menu
 
+
 String in = ""; //In the score screen, this String is used to display the current name to be saved with the current score
 String out = ""; //Once enter is pressed, out is saved as in's last entry and saved in a CSV file along with the score
 
@@ -68,17 +59,15 @@ void setup() {
   table = loadTable("scores.csv", "header"); //Loads the score/name table
   pipes = new Pipe[3];
   score = new Score(0);
-  min = new Minim(this);
-  spooks = min.loadFile("spook.mp3");
-  spooks.loop(100);
-    for (int a = 0; a < pipes.length; a++) {
+  for (int a = 0; a < pipes.length; a++) {
     pipes[a] = new Pipe(a*300+700, (int)random(50, 250));
   }
-  frameRate(59);
+  frameRate(59 ); //reduces tearing on these monitors
 }
 
 void draw() {
   background(111, 206, 255); //Dat Flappy Blue
+  //background(random(256), random(256), random(256));
   if (score.getScore() >= 1000) //If you (for some reason) have a score of 1000+, you get a groovy background
     background(random(256), random(256), random(256));
   yTop = (int)tomY - 36; //Always sets Tom's top pos relative to his y coordinate
@@ -96,6 +85,7 @@ void draw() {
   if (gameOver) {
     gameOverMenu();
   }
+  //rect(59*width/80, 77*height/80, 50, 21);
 }
 
 void drawMainMenu() {
@@ -134,7 +124,8 @@ void playGame() {
   checkFlappy();
   textFont(flap48);
   fill(255);
-  text(score.getScore(), width/2 - 10, 1*width/4);
+  textAlign(CENTER);
+  text(score.getScore(), width/2, width/4);
   if (jumped)
     tomY+=speed;
   if (!jumped) {
@@ -142,7 +133,7 @@ void playGame() {
     tomY += speedOfLogo;
     if (tomY > 265 || tomY < 235)
       speedOfLogo*=-1;
-    text("Press space to flap!", 210, 350);
+    text("Press space to flap!", width/2, 350);
   }
 }
 
@@ -184,9 +175,9 @@ void gameOverMenu() {
   }
   textAlign(CENTER);
   fill(255);
-  text("YOU LOST WITH A SCORE OF:\n" + score.getScore(), 300, 150);
-  text("Press your tilde key to continue\nOR type your name:", 300, 350);
-  text(in + "\nPress the return key when you are done...", 300, 400);
+  text("YOU LOST WITH A SCORE OF:\n" + score.getScore(), width/2, 150);
+  text("Press your tilde key to continue\nOR type your name:", width/2, 350);
+  text(in + "\nPress the return key when you are done...", width/2, 400);
   image(tomceji, width/2, logoY); //Tom's swaggin' face
   logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
   if (logoY > 265 || logoY < 235) {
@@ -235,7 +226,7 @@ void backgroundFlappy() { //Draws background (ground, sky, etc.)
   rect(-11, 500, 621, 110);
   fill(122, 126, 4);
   textAlign(RIGHT);
-  text("Made by Fisher Darling and Eric Lindau", 79*width/80, 595);
+  text("Made by Eric Lindau and Vinay Merchant", 79*width/80, 595);
   textAlign(LEFT);
   if (mainMenu == false) {
     text("main menu", 5, 595);

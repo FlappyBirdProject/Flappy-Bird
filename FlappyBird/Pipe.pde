@@ -12,7 +12,7 @@ public class Pipe {
   }
 
   public void drawPipe() {
-    fill(0, 255, 0);
+    fill(0, 255, 0); 
     rect(xPos, -10, 60, randSize);
     rect(xPos - 20, randSize - 10, 100, 35);
     rect(xPos, randSize + 210, 60, height);
