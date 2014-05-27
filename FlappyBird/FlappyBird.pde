@@ -1,7 +1,5 @@
 //****************************//
 //         Flappy Tom!        //
-//      by Eric Lindau and    //
-//        Vinay Merchant      //
 //****************************//
 
 PImage tomceji; //Tom's picture ... 56x74 (54x72 without considering useless pixels)
@@ -21,6 +19,7 @@ boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
 boolean pipeMove = true; //If pipes are allowed to move left
 boolean jumped = false; //If Tom has 'jumped'
+boolean egg; //Vinay's easter egg (that's actually Josh's (that Eric actually made (that Josh helped with (that was inspired by Vinay))))
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
@@ -85,7 +84,6 @@ void draw() {
   if (gameOver) {
     gameOverMenu();
   }
-  //rect(59*width/80, 77*height/80, 50, 21);
 }
 
 void drawMainMenu() {
@@ -110,6 +108,12 @@ void playGame() {
     }
   }
   image(tomceji, width/2, tomY); //Tom's swaggin' face
+  fill(100,0,0);
+  noStroke();
+  ellipse(width/2+50,tomY,40,40);
+  rect(width/2+50,tomY-20,50,20);
+  fill(100,100,255,100);
+  arc(width/2+75,tomY-10,random(50,160),random(50,160),-2*PI/5,2*PI/5);
   if (goUp) {      //Lets Tom fly when space bar is pressed
     speed -= grav;
     if (!jumped)
@@ -226,7 +230,7 @@ void backgroundFlappy() { //Draws background (ground, sky, etc.)
   rect(-11, 500, 621, 110);
   fill(122, 126, 4);
   textAlign(RIGHT);
-  text("Made by Eric Lindau and Vinay Merchant", 79*width/80, 595);
+  text("Made by Eric Lindau", 79*width/80, 595);
   textAlign(LEFT);
   if (mainMenu == false) {
     text("main menu", 5, 595);
@@ -297,5 +301,10 @@ void resetGame() {
   in="";
   out="";
   speed = 0;
+}
+
+void mousePressed() {
+//  if(mouseX >= 59*width/80 && mouseX <= 59*width/80+50 && mouseY >= 77*height/80 && mouseY <= 77*height/80+21) //hitbox for "Vinay" on screen (when clicked, makes pipes flash ly (thanks Vinay and Josh (#rude)))
+    //egg = !egg;
 }
 
