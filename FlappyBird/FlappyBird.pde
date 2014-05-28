@@ -18,8 +18,7 @@ boolean scoreMenu; //Checks if score menu is active`
 boolean gameOver; //Checks if player loses
 boolean goUp; //Checks if player wants to "flap" (move up)
 boolean pipeMove = true; //If pipes are allowed to move left
-boolean jumped = false; //If Tom has 'jumped'
-boolean egg; //Vinay's easter egg (that's actually Josh's (that Eric actually made (that Josh helped with (that was inspired by Vinay))))
+boolean jumped; //If Tom has 'jumped'
 
 float logoY = 250; //Y coordinate of Tom's face on the main menu
 float speedOfLogo = .5; //Speed of Tom's face on the main menu
@@ -61,14 +60,11 @@ void setup() {
   for (int a = 0; a < pipes.length; a++) {
     pipes[a] = new Pipe(a*300+700, (int)random(50, 250));
   }
-  frameRate(59 ); //reduces tearing on these monitors
+  frameRate(59 ); //reduces tearing
 }
 
 void draw() {
   background(111, 206, 255); //Dat Flappy Blue
-  //background(random(256), random(256), random(256));
-  if (score.getScore() >= 1000) //If you (for some reason) have a score of 1000+, you get a groovy background
-    background(random(256), random(256), random(256));
   yTop = (int)tomY - 36; //Always sets Tom's top pos relative to his y coordinate
   yBot = (int)tomY + 36; //Always sets Tom's bot pos relative to his y coordinate
   if (play) {
@@ -92,7 +88,7 @@ void drawMainMenu() {
   drawScoresButton();
   image(logo, 300, 150);
   image(tomceji, width/2, logoY); //Tom's swaggin' face
-  logoY += speedOfLogo; //Lets Tom's face "levitate" but also "bounce" on main menu
+  logoY += speedOfLogo; //Lets Tom's face "levitate" on main menu
   if (logoY > 265 || logoY < 235) {
     speedOfLogo *= -1;
   }
@@ -100,7 +96,7 @@ void drawMainMenu() {
 
 void playGame() {
   textFont(flap20);
-  for (int a = 0; a < pipes.length; a++) {
+  for (int a = 0; a < pipes.length; a++) { //All the pipes
     pipes[a].drawPipe();
     if (pipeMove && jumped) {
       pipes[a].movePipe();
@@ -108,12 +104,6 @@ void playGame() {
     }
   }
   image(tomceji, width/2, tomY); //Tom's swaggin' face
-  fill(100,0,0);
-  noStroke();
-  ellipse(width/2+50,tomY,40,40);
-  rect(width/2+50,tomY-20,50,20);
-  fill(100,100,255,100);
-  arc(width/2+75,tomY-10,random(50,160),random(50,160),-2*PI/5,2*PI/5);
   if (goUp) {      //Lets Tom fly when space bar is pressed
     speed -= grav;
     if (!jumped)
@@ -174,9 +164,6 @@ void drawScoreMenu() {
 }
 
 void gameOverMenu() {
-  if (play) {
-    gameOver = false;
-  }
   textAlign(CENTER);
   fill(255);
   text("YOU LOST WITH A SCORE OF:\n" + score.getScore(), width/2, 150);
@@ -209,7 +196,7 @@ void keyPressed() {
     if (key == BACKSPACE && in.length() > 0) {//If backspace and there is a character available
       in = in.substring(0, in.length() - 1);  //Delete rightmost character
     }                                         
-    if (key == '`' || key == '~') {
+    if (key == '`' || key == '~') { //button
       resetGame();
     }
   }
@@ -221,7 +208,7 @@ void keyPressed() {
   }
 }
 
-void backgroundFlappy() { //Draws background (ground, sky, etc.)
+void backgroundFlappy() { //Draws background (ground, sky, text)
   textFont(flap20);
   noStroke();
   strokeWeight(10);
@@ -277,16 +264,20 @@ void drawScoresButton() {
 
 void checkFlappy() {
   //floor hitbox
+  //makes Tom bounce but not lose yet
   if (tomY + 27 >= 480 && pipeMove) {
     pipeMove = false;
     speed = -10;
     tomY -= 5;
   }
+  //after bounce Tom loses once he hits the ground again
   if (tomY + 27 >= 490 && !pipeMove) {
     gameOver = true;
     play = false;
   }
 }
+//called every time you hit the play button
+//resets everything
 void resetGame() {
   jumped = false;
   score = new Score(0);
@@ -302,9 +293,3 @@ void resetGame() {
   out="";
   speed = 0;
 }
-
-void mousePressed() {
-//  if(mouseX >= 59*width/80 && mouseX <= 59*width/80+50 && mouseY >= 77*height/80 && mouseY <= 77*height/80+21) //hitbox for "Vinay" on screen (when clicked, makes pipes flash ly (thanks Vinay and Josh (#rude)))
-    //egg = !egg;
-}
-
